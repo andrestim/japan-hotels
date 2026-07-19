@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0B0907">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%230B0907'/%3E%3Crect x='3' y='3' width='58' height='58' rx='10' fill='none' stroke='%23E6BC66' stroke-width='2'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23E6BC66' font-family='serif'%3E宿%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0B0907;
@@ -83,21 +83,21 @@ h1 .h1-num{color:var(--gold);}
 .tabbar{display:flex;gap:26px;border-bottom:1px solid var(--line);width:100%;}
 .tabbar button{
   background:none;border:0;padding:8px 2px 10px;font-size:13px;letter-spacing:.2em;
-  color:var(--ink-soft);cursor:pointer;position:relative;
+  color:var(--ink-soft);cursor:pointer;position:relative;font-weight:300;
   font-family:'Noto Sans TC',sans-serif;transition:color .2s;
 }
 .tabbar button:hover{color:var(--ink);}
-.tabbar button.on{color:var(--gold);font-weight:700;}
+.tabbar button.on{color:var(--gold);font-weight:400;}
 .tabbar button.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);}
 .tabbar button:focus-visible{outline:2px solid var(--shu);outline-offset:-2px;}
 .pills{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
 .pills button{
   border:1px solid var(--chip-line);background:transparent;border-radius:20px;
-  padding:6px 16px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;
+  padding:6px 16px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;font-weight:300;
   font-family:'Noto Sans TC',sans-serif;transition:background .2s,color .2s,border-color .2s;
 }
 .pills button:hover{border-color:var(--gold-deep);color:var(--ink);}
-.pills button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700;}
+.pills button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:400;}
 .pills button:focus-visible{outline:2px solid var(--shu);}
 .pill-sep{width:1px;height:18px;background:var(--chip-line);margin:0 4px;}
 .dd{position:relative;}
@@ -196,9 +196,10 @@ h1 .h1-num{color:var(--gold);}
 .rloc{font-size:12px;color:var(--ink-faint);}
 .lev{
   font-size:11px;padding:1px 9px;border-radius:4px;
-  background:var(--chip);color:var(--gold);border:1px solid var(--chip-line);
+  background:var(--chip);color:var(--ink-soft);border:1px solid var(--chip-line);
   white-space:nowrap;
 }
+.lev.elite{color:var(--gold);border-color:var(--gold-deep);}
 .xref{
   font-size:11px;padding:1px 8px;border-radius:4px;
   background:transparent;color:var(--ink-faint);border:1px dashed var(--chip-line);
@@ -737,7 +738,7 @@ const STAYS=[
 ["ホテルサンルートプラザ新宿","新宿・東京","關東","3","普通，房間小。"]
 ];
 
-const STATUS={"IHG":"IHG鑽","Marriott":"萬豪白金","Accor":"雅高白金","GHA":"GHA鈦"};
+const STATUS={"IHG":"IHG - 鑽","Marriott":"萬豪 - 白金","Accor":"雅高 - 白金","GHA":"GHA - 鈦"};
 const BANDS_G=[
 {key:"S",from:1,to:40,color:"var(--band-s)",label:"S 帶 1–40",desc:"值得專程"},
 {key:"A",from:41,to:100,color:"var(--band-a)",label:"A 帶 41–100",desc:"擇期必去"},
@@ -783,7 +784,7 @@ function actsHTML(name,loc){
 function rowHTML(h,bands,indie){
   const [rank,name,loc,region,group,series,price,note,mark]=h;
   const b=bandOf(rank,bands);
-  const tag=indie?"":`<span class="lev">${STATUS[group]||group}</span>`;
+  const tag=indie?"":`<span class="lev${STATUS[group]?" elite":""}">${STATUS[group]||group}</span>`;
   return `<div class="row" style="--band-color:${b.color}">
     <div class="rank">${rank}<small>${b.key}帶</small></div>
     <div class="rmain">
