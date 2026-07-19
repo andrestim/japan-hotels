@@ -814,6 +814,12 @@ const state={view:"sel",sub:"grp",trip:"future",regions:new Set(),groups:new Set
 const inSet=(s,v)=>!s.size||s.has(v);
 const $=id=>document.getElementById(id);
 const norm=n=>n.replace(/^[★◎⏳]\s*/,"").trim();
+/* 一次性重置：清空所有手動加入/移除，回到資料默認(◎/⏳ 內建)。改日期即可再觸發一次 */
+const RESET_VER="2026-07-20";
+if(localStorage.getItem("hj250resetVer")!==RESET_VER){
+  ["hj250future","hj250watch","hj250futureEx","hj250watchEx","hj250plan"].forEach(k=>localStorage.removeItem(k));
+  localStorage.setItem("hj250resetVer",RESET_VER);
+}
 let fut=new Set(JSON.parse(localStorage.getItem("hj250future")||"[]"));
 let wat=new Set(JSON.parse(localStorage.getItem("hj250watch")||"[]"));
 let futEx=new Set(JSON.parse(localStorage.getItem("hj250futureEx")||"[]"));
