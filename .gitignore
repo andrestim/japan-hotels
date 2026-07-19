@@ -1,0 +1,5 @@
+# 這個 repo 是公開的 GitHub Pages,只發布網頁本身。
+# 以下為 Tim 的私人維護脈絡(會籍槓桿、住宿自評、行程表),一律留在本機,勿推上公開 repo。
+*
+!index.html
+!.gitignore
