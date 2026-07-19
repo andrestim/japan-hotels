@@ -190,9 +190,15 @@ h1 .h1-num{color:var(--gold);}
 .rank small{display:block;font-size:10px;color:var(--ink-faint);font-family:'Noto Sans TC',sans-serif;font-weight:400;letter-spacing:.1em;margin-top:4px;}
 .rank.stay{font-size:16px;letter-spacing:.02em;padding-top:8px;}
 .rmain{min-width:0;}
-.rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding-right:76px;}
-.rname{font-weight:700;font-size:15px;color:var(--ink);}
-.rname .mark{color:var(--shu);font-weight:700;margin-right:2px;}
+.rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding-right:66px;}
+.rname{font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;transition:color .2s;}
+a.rname:hover{color:var(--gold);}
+.rchips{display:flex;gap:6px;margin-top:6px;}
+.stayed{
+  font-size:11px;padding:1px 9px;border-radius:4px;
+  background:transparent;color:var(--ink-faint);border:1px solid var(--chip-line);
+  white-space:nowrap;
+}
 .rloc{font-size:12px;color:var(--ink-faint);}
 .lev{
   font-size:11px;padding:1px 9px;border-radius:4px;
@@ -211,21 +217,27 @@ h1 .h1-num{color:var(--gold);}
 }
 .fmark.plan{background:transparent;color:var(--gold);border:1px solid var(--gold);}
 .rnote{margin-top:7px;font-size:13px;color:var(--ink-soft);line-height:1.7;}
-.acts{position:absolute;top:10px;right:10px;display:flex;gap:6px;}
-.maplink,.bmk{
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  color:var(--gold);text-decoration:none;cursor:pointer;
-  border:1px solid var(--chip-line);border-radius:8px;background:var(--chip);
+.acts{position:absolute;top:10px;right:10px;display:flex;gap:5px;}
+.bmk,.mag{
+  width:27px;height:27px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-faint);cursor:pointer;
+  border:1px solid var(--chip-line);border-radius:7px;background:var(--chip);
   transition:background .2s,color .2s,border-color .2s;
   font-family:inherit;
 }
-.maplink svg,.bmk svg{width:16px;height:16px;}
-.maplink:hover,.bmk:hover{background:var(--gold);border-color:var(--gold);color:var(--bg);}
-.bmk.in{background:var(--gold);border-color:var(--gold);color:var(--bg);}
-.maplink:focus-visible,.bmk:focus-visible{outline:2px solid var(--shu);}
+.bmk svg,.mag svg{width:13px;height:13px;}
+.bmk:hover,.mag:hover{border-color:var(--gold);color:var(--gold);}
+.bmk.in,.mag.in{background:var(--gold);border-color:var(--gold);color:var(--bg);}
+.bmk:focus-visible,.mag:focus-visible{outline:2px solid var(--shu);}
 .price{
   font-size:12px;font-weight:700;letter-spacing:.06em;
-  color:var(--gold);white-space:nowrap;
+  color:var(--gold);white-space:nowrap;position:relative;cursor:help;
+}
+.price:hover::after{
+  content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);
+  background:var(--card-hi);border:1px solid var(--chip-line);color:var(--ink-soft);
+  padding:4px 11px;border-radius:6px;font-size:11px;font-weight:400;letter-spacing:0;
+  white-space:nowrap;z-index:50;box-shadow:0 6px 18px rgba(0,0,0,.4);
 }
 
 /* ---------- 定番 ---------- */
@@ -264,7 +276,7 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
   select.flt{max-width:120px;}
   .controls{position:static;}
   #search{position:static;width:100%;margin-top:14px;}
-  .rtitle{padding-right:0;margin-right:76px;}
+  .rtitle{padding-right:0;margin-right:66px;}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
@@ -279,7 +291,6 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
   <div class="eyebrow">日本旅宿</div>
   <h1>日本飯店<span class="h1-num">250</span>選</h1>
   <input id="search" type="search" placeholder="搜尋飯店、城市、集團…" aria-label="搜尋">
-  <div class="legend"><span class="p">$</span> 10K內 ・ <span class="p">$$</span> 15K內 ・ <span class="p">$$$</span> 20K內 ・ <span class="p">$$$$</span> 30K內 ・ <span class="p">$$$$$</span> 30K+</div>
 </header>
 
 <div class="controls">
@@ -298,6 +309,7 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
       <span class="pill-sep hidden" id="tripSep"></span>
       <button id="t-future" class="hidden on">將來</button>
       <button id="t-past" class="hidden">過去</button>
+      <button id="t-watch" class="hidden">觀察</button>
     </div>
     <span class="count" id="count"></span>
   </div>
@@ -753,19 +765,26 @@ const BANDS_I=[
 ];
 const REGIONS=["全部","北海道","東北","關東","中部","關西","中國","四國","九州","沖繩"];
 const PRICE_MARK=["","$","$$","$$$","$$$$","$$$$$"];
+const PRICE_TIP=["","平日雙人約 10K 內（台幣／晚）","平日雙人約 15K 內（台幣／晚）","平日雙人約 20K 內（台幣／晚）","平日雙人約 30K 內（台幣／晚）","平日雙人 30K+（台幣／晚）"];
 const SCORE_VAL={"5+++":5.3,"5":5,"4.5":4.5,"4":4,"3.5":3.5,"3":3,"—":0};
 const ALIAS={"Vessel Inn 高田馬場":"ベッセルイン高田馬場駅前"};
 const PIN='<svg class="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 const MAP_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 const BM_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3h12v18l-6-4.2L6 21z"/><path d="M12 8v6M9 11h6"/></svg>';
-const BM_ICON_IN='<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M6 3h12v18l-6-4.2L6 21z"/></svg>';
+const MAG_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>';
 
 const state={view:"sel",sub:"grp",trip:"future",regions:new Set(),groups:new Set(),seriesSel:new Set(),prices:new Set(),q:""};
 const inSet=(s,v)=>!s.size||s.has(v);
 const $=id=>document.getElementById(id);
 const norm=n=>n.replace(/^[★◎⏳]\s*/,"").trim();
-let plan=new Set(JSON.parse(localStorage.getItem("hj250plan")||"[]"));
-function savePlan(){localStorage.setItem("hj250plan",JSON.stringify([...plan]));}
+let fut=new Set(JSON.parse(localStorage.getItem("hj250future")||"[]"));
+let wat=new Set(JSON.parse(localStorage.getItem("hj250watch")||"[]"));
+JSON.parse(localStorage.getItem("hj250plan")||"[]").forEach(n=>fut.add(n));
+localStorage.removeItem("hj250plan");
+function saveSets(){localStorage.setItem("hj250future",JSON.stringify([...fut]));localStorage.setItem("hj250watch",JSON.stringify([...wat]));}
+const BUILT_FUT=new Set(),BUILT_WAT=new Set();
+GROUPED.concat(INDIE).forEach(h=>{if(h[8]==="◎")BUILT_FUT.add(norm(h[1]));else if(h[8]==="⏳")BUILT_WAT.add(norm(h[1]));});
+SLOTS.forEach(s=>s.rows.forEach(r=>{if(r[0].startsWith("◎"))BUILT_FUT.add(norm(r[0]));else if(r[0].startsWith("⏳"))BUILT_WAT.add(norm(r[0]));}));
 
 function gmap(name,loc){
   const clean=norm(name).replace(/（.*?）/g," ").replace(/\(.*?\)/g," ").trim();
@@ -773,30 +792,32 @@ function gmap(name,loc){
   return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(clean+" "+city);
 }
 function bandOf(rank,bands){return bands.find(b=>rank>=b.from&&rank<=b.to);}
-function actsHTML(name,loc){
+function actsHTML(name){
   const n=norm(name);
-  const inPlan=plan.has(n);
+  const inF=fut.has(n)||BUILT_FUT.has(n);
+  const inW=wat.has(n)||BUILT_WAT.has(n);
   return `<div class="acts">
-    <a class="maplink" href="${gmap(name,loc)}" target="_blank" rel="noopener" aria-label="在 Google Maps 開啟 ${n}" title="地圖">${MAP_ICON}</a>
-    <button class="bmk${inPlan?" in":""}" data-n="${n}" aria-label="${inPlan?"移出預定":"加入預定"}" title="${inPlan?"移出預定":"加入預定"}">${inPlan?BM_ICON_IN:BM_ICON}</button>
+    <button class="bmk${inF?" in":""}" data-n="${n}" aria-label="加入將來" title="${inF?"移出將來":"加入將來"}">${BM_ICON}</button>
+    <button class="mag${inW?" in":""}" data-n="${n}" aria-label="加入觀察" title="${inW?"移出觀察":"加入觀察"}">${MAG_ICON}</button>
   </div>`;
 }
-function rowHTML(h,bands,indie){
+function rowHTML(h,bands,indie,trip){
   const [rank,name,loc,region,group,series,price,note,mark]=h;
   const b=bandOf(rank,bands);
-  const tag=indie?"":`<span class="lev${STATUS[group]?" elite":""}">${STATUS[group]||group}</span>`;
+  const tag=indie?(trip?`<span class="lev">獨立</span>`:""):`<span class="lev${STATUS[group]?" elite":""}">${STATUS[group]||group}</span>`;
   return `<div class="row" style="--band-color:${b.color}">
     <div class="rank">${rank}<small>${b.key}帶</small></div>
     <div class="rmain">
       <div class="rtitle">
-        <span class="rname">${mark?`<span class="mark">${mark}</span>`:""}${name}</span>
+        <a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${norm(name)}</a>
         <span class="rloc">${loc}${series&&series!==group&&!indie?"｜"+series:indie?"｜"+series:""}</span>
         ${tag}
-        <span class="price">${PRICE_MARK[price]}</span>
+        <span class="price" data-tip="${PRICE_TIP[price]}">${PRICE_MARK[price]}</span>
       </div>
+      ${mark==="★"?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
       <div class="rnote">${note}</div>
     </div>
-    ${actsHTML(name,loc)}
+    ${actsHTML(name)}
   </div>`;
 }
 function filterRows(list){
@@ -823,13 +844,27 @@ function renderRank(list,bands,total,label){
   return html;
 }
 function slotRowHTML(r,idx){
+  const stay=r[0].startsWith("★");
   return `<div class="slot-row">
     <div class="slot-rank">${idx}</div>
     <div class="rmain">
-      <div class="rtitle"><span class="rname">${r[0]}</span><span class="rloc">${r[1]}</span><span class="price">${PRICE_MARK[r[3]]}</span></div>
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
+      ${stay?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
       <div class="rnote">${r[4]}</div>
     </div>
-    ${actsHTML(r[0],r[1])}
+    ${actsHTML(r[0])}
+  </div>`;
+}
+function slotTripHTML(r){
+  const stay=r[0].startsWith("★");
+  return `<div class="row" style="--band-color:var(--band-c)">
+    <div class="rank stay" style="color:var(--ink-faint);font-size:13px;">定番</div>
+    <div class="rmain">
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="lev">定番</span><span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
+      ${stay?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
+      <div class="rnote">${r[4]}</div>
+    </div>
+    ${actsHTML(r[0])}
   </div>`;
 }
 function renderSlots(){
@@ -852,58 +887,46 @@ function renderSlots(){
   $("count").textContent=`定番：${SLOTS.length} 組・${total} 間`;
   return html||`<div class="empty">沒有符合的定番。</div>`;
 }
-function futureItems(){
+function tripList(kind){
   const seen=new Map();
-  const push=(name,loc,region,note,kind)=>{
-    const n=norm(name);
-    if(seen.has(n)){if(kind==="◎")seen.get(n).kind="◎";return;}
-    seen.set(n,{n,loc,region,note,kind});
-  };
-  GROUPED.concat(INDIE).forEach(h=>{
-    if(h[8]==="◎")push(h[1],h[2],h[3],h[7],"◎");
-    else if(h[8]==="⏳")push(h[1],h[2],h[3],h[7],"⏳");
-  });
-  SLOTS.forEach(s=>s.rows.forEach(r=>{
-    if(r[0].startsWith("◎"))push(r[0],r[1],r[2],r[4],"◎");
-    else if(r[0].startsWith("⏳"))push(r[0],r[1],r[2],r[4],"⏳");
-  }));
-  plan.forEach(n=>{
+  const addRow=n=>{
     if(seen.has(n))return;
-    const hit=GROUPED.concat(INDIE).find(h=>norm(h[1])===n);
-    if(hit){push(hit[1],hit[2],hit[3],hit[7],"plan");return;}
+    const g=GROUPED.find(h=>norm(h[1])===n);
+    if(g){seen.set(n,{type:"g",row:g});return;}
+    const i=INDIE.find(h=>norm(h[1])===n);
+    if(i){seen.set(n,{type:"i",row:i});return;}
     let srow=null;SLOTS.forEach(s=>s.rows.forEach(r=>{if(norm(r[0])===n)srow=r;}));
-    if(srow)push(srow[0],srow[1],srow[2],srow[4],"plan");
-    else seen.set(n,{n,loc:"",region:"",note:"",kind:"plan"});
-  });
+    if(srow)seen.set(n,{type:"s",row:srow});
+    else seen.set(n,{type:"x",n});
+  };
+  (kind==="future"?BUILT_FUT:BUILT_WAT).forEach(addRow);
+  (kind==="future"?fut:wat).forEach(addRow);
   return [...seen.values()];
 }
 function renderTrip(){
-  if(state.trip==="future"){
-    const q=state.q.trim().toLowerCase();
-    let items=futureItems().filter(it=>{
-      if(!inSet(state.regions,it.region))return false;
-      if(q&&!(it.n+it.loc+it.note).toLowerCase().includes(q))return false;
+  const q=state.q.trim().toLowerCase();
+  if(state.trip!=="past"){
+    const kind=state.trip;
+    const label=kind==="future"?"將來":"觀察";
+    const items=tripList(kind).filter(it=>{
+      const reg=it.type==="g"||it.type==="i"?it.row[3]:it.type==="s"?it.row[2]:"";
+      if(!inSet(state.regions,reg))return false;
+      const hay=it.type==="x"?it.n:(it.type==="s"?it.row[0]+it.row[1]+it.row[4]:it.row[1]+it.row[2]+it.row[7]);
+      if(q&&!hay.toLowerCase().includes(q))return false;
       return true;
     });
-    items.sort((a,b)=>(a.kind==="◎"?0:1)-(b.kind==="◎"?0:1));
-    $("count").textContent=`將來：${items.length} 間`;
-    if(!items.length)return `<div class="empty">還沒有預定——按卡片右上的加入圖標，把想住的收進來。</div>`;
-    let html=`<div class="band-head"><span class="tag" style="background:var(--gold)">將來</span><span class="desc">已訂與預定的住宿——卡片右上圖標可加入或移出</span></div>`;
+    $("count").textContent=`${label}：${items.length} 間`;
+    if(!items.length)return `<div class="empty">${kind==="future"?"還沒有將來行程——按卡片右上的書籤鈕加入。":"還沒有觀察名單——按卡片右上的放大鏡鈕加入。"}</div>`;
+    let html="";
     items.forEach(it=>{
-      const badge=it.kind==="◎"?`<span class="fmark">◎ 已訂</span>`:`<span class="fmark plan">預定</span>`;
-      html+=`<div class="row" style="--band-color:var(--gold)">
-        <div class="rank stay" style="color:var(--gold)">${it.kind==="◎"?"◎":"⏳"}</div>
-        <div class="rmain">
-          <div class="rtitle"><span class="rname">${it.n}</span><span class="rloc">${it.loc}</span>${badge}</div>
-          ${it.note?`<div class="rnote">${it.note}</div>`:""}
-        </div>
-        ${actsHTML(it.n,it.loc||"")}
-      </div>`;
+      if(it.type==="g")html+=rowHTML(it.row,BANDS_G,false,true);
+      else if(it.type==="i")html+=rowHTML(it.row,BANDS_I,true,true);
+      else if(it.type==="s")html+=slotTripHTML(it.row);
+      else html+=`<div class="row"><div class="rank stay"></div><div class="rmain"><div class="rtitle"><span class="rname">${it.n}</span></div></div>${actsHTML(it.n)}</div>`;
     });
     return html;
   }
   /* past */
-  const q=state.q.trim().toLowerCase();
   const list=STAYS.filter(s=>{
     if(!inSet(state.regions,s[2]))return false;
     if(q&&!(s[0]+s[1]+s[4]).toLowerCase().includes(q))return false;
@@ -927,10 +950,10 @@ function renderTrip(){
     html+=`<div class="row" style="--band-color:${scoreColor(score)}">
       <div class="rank stay" style="color:${scoreColor(score)}">${score}</div>
       <div class="rmain">
-        <div class="rtitle"><span class="rname">${name}</span><span class="rloc">${loc}</span>${xref(name)}</div>
+        <div class="rtitle"><a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${name}</a><span class="rloc">${loc}</span>${xref(name)}</div>
         <div class="rnote">${comment}</div>
       </div>
-      ${actsHTML(name,loc)}
+      ${actsHTML(name)}
     </div>`;
   });
   return html;
@@ -1039,6 +1062,7 @@ function render(){
   $("tripSep").classList.toggle("hidden",!tripOn);
   $("t-future").classList.toggle("hidden",!tripOn);
   $("t-past").classList.toggle("hidden",!tripOn);
+  $("t-watch").classList.toggle("hidden",!tripOn);
   renderDD();
   renderTags();
   let html;
@@ -1054,14 +1078,21 @@ function bindActs(){
   document.querySelectorAll(".bmk").forEach(b=>{
     b.addEventListener("click",()=>{
       const n=b.dataset.n;
-      plan.has(n)?plan.delete(n):plan.add(n);
-      savePlan();render();
+      fut.has(n)?fut.delete(n):fut.add(n);
+      saveSets();render();
+    });
+  });
+  document.querySelectorAll(".mag").forEach(b=>{
+    b.addEventListener("click",()=>{
+      const n=b.dataset.n;
+      wat.has(n)?wat.delete(n):wat.add(n);
+      saveSets();render();
     });
   });
 }
 function setView(v){state.view=v;$("v-sel").classList.toggle("on",v==="sel");$("v-region").classList.toggle("on",v==="region");openDD=null;render();}
 function setSub(s){state.sub=s;["grp","ind","slot","trip"].forEach(x=>$("s-"+x).classList.toggle("on",x===s));state.groups.clear();state.seriesSel.clear();openDD=null;render();}
-function setTrip(t){state.trip=t;$("t-future").classList.toggle("on",t==="future");$("t-past").classList.toggle("on",t==="past");render();}
+function setTrip(t){state.trip=t;["future","past","watch"].forEach(x=>$("t-"+x).classList.toggle("on",x===t));render();}
 $("v-sel").addEventListener("click",()=>setView("sel"));
 $("v-region").addEventListener("click",()=>setView("region"));
 $("s-grp").addEventListener("click",()=>setSub("grp"));
@@ -1070,6 +1101,7 @@ $("s-slot").addEventListener("click",()=>setSub("slot"));
 $("s-trip").addEventListener("click",()=>setSub("trip"));
 $("t-future").addEventListener("click",()=>setTrip("future"));
 $("t-past").addEventListener("click",()=>setTrip("past"));
+$("t-watch").addEventListener("click",()=>setTrip("watch"));
 $("search").addEventListener("input",e=>{state.q=e.target.value;render();});
 
 render();
