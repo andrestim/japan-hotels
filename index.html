@@ -7,34 +7,38 @@
 <meta name="theme-color" content="#0B0907">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%230B0907'/%3E%3Crect x='3' y='3' width='58' height='58' rx='10' fill='none' stroke='%23E6BC66' stroke-width='2'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23E6BC66' font-family='serif'%3E宿%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0B0907;
-  --card:#171310;
-  --card-hi:#1F1A14;
-  --ink:#F3EDDE;
-  --ink-soft:#C2B8A2;
-  --ink-faint:#8A8172;
+  --bg:#0B0908;
+  --card:#161311;
+  --card-hi:#1E1A16;
+  --ink:#F1EBDD;
+  --ink-soft:#BCB2A0;
+  --ink-faint:#867E71;
   --gold:#E6BC66;
-  --gold-deep:#C99F49;
-  --shu:#E2795B;
+  --gold-deep:#C29A48;
+  --shu:#C96F52;
   --band-s:#E6BC66;
-  --band-a:#82C3AE;
-  --band-b:#9FADD2;
-  --band-c:#8A8378;
-  --line:#2B251D;
-  --chip:#221C14;
-  --chip-line:#41392B;
+  --band-a:#7FA894;
+  --band-b:#8E9AB6;
+  --band-c:#8F887B;
+  --line:#292420;
+  --chip:#211A14;
+  --chip-line:#3E362B;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
-  background:var(--bg);
+  background:
+    radial-gradient(120% 60% at 15% 0%, rgba(230,188,102,.035), transparent 55%),
+    radial-gradient(90% 50% at 100% 30%, rgba(201,111,82,.022), transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
   color:var(--ink);
   font-family:'Noto Sans TC',sans-serif;
   font-size:14px;
-  line-height:1.6;
+  line-height:1.62;
 }
 ::selection{background:var(--gold);color:var(--bg);}
 .wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px;}
@@ -43,19 +47,24 @@ body{
 header{padding:38px 0 14px;position:relative;}
 .eyebrow{
   font-family:'Shippori Mincho',serif;
-  letter-spacing:.5em;
+  letter-spacing:.55em;
   font-size:12px;
-  color:var(--gold);
-  margin-bottom:12px;
+  color:var(--gold-deep);
+  margin-bottom:14px;
 }
 h1{
   font-family:'Shippori Mincho',serif;
   font-weight:800;
   font-size:clamp(28px,5.5vw,44px);
-  letter-spacing:.08em;
-  line-height:1.2;
+  letter-spacing:.1em;
+  line-height:1.22;
 }
-h1 .h1-num{color:var(--gold);}
+h1 .h1-num{color:var(--gold);font-weight:700;}
+.tagline{
+  font-family:'Shippori Mincho',serif;font-weight:400;
+  margin-top:12px;font-size:13.5px;letter-spacing:.14em;
+  color:var(--ink-soft);
+}
 #search{
   position:absolute;top:46px;right:0;
   width:250px;
@@ -158,10 +167,10 @@ h1 .h1-num{color:var(--gold);}
   content:"";flex:1;height:1px;background:var(--line);min-width:40px;
 }
 .band-head .tag,.region-head .tag{
-  color:var(--bg);font-size:12px;letter-spacing:.15em;
-  padding:4px 13px;border-radius:4px;font-family:'Noto Sans TC',sans-serif;font-weight:700;
+  color:var(--bg);font-size:12px;letter-spacing:.18em;
+  padding:3px 12px;border-radius:2px;font-family:'Shippori Mincho',serif;font-weight:600;
 }
-.band-head .desc,.region-head .desc{font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--ink-faint);letter-spacing:0;}
+.band-head .desc,.region-head .desc{font-family:'Shippori Mincho',serif;font-size:12.5px;color:var(--ink-soft);letter-spacing:.08em;}
 .region-head .pin{width:15px;height:15px;flex:0 0 auto;color:var(--gold);}
 .sec-head{
   font-size:12.5px;color:var(--ink-faint);letter-spacing:.2em;
@@ -288,8 +297,9 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">日本旅宿</div>
+  <div class="eyebrow">日本の宿 ・ 私撰二五〇</div>
   <h1>日本飯店<span class="h1-num">250</span>選</h1>
+  <div class="tagline">值得為那一泊，編一趟旅。</div>
   <input id="search" type="search" placeholder="搜尋飯店、城市、集團…" aria-label="搜尋">
 </header>
 
@@ -752,16 +762,16 @@ const STAYS=[
 
 const STATUS={"IHG":"IHG - 鑽","Marriott":"Marriott - 白金","Accor":"Accor - 白金","GHA":"GHA - 鈦"};
 const BANDS_G=[
-{key:"S",from:1,to:40,color:"var(--band-s)",label:"S 帶 1–40",desc:"值得專程"},
-{key:"A",from:41,to:100,color:"var(--band-a)",label:"A 帶 41–100",desc:"擇期必去"},
-{key:"B",from:101,to:160,color:"var(--band-b)",label:"B 帶 101–160",desc:"區域優等生"},
-{key:"C",from:161,to:200,color:"var(--band-c)",label:"C 帶 161–200",desc:"順遊之選"}
+{key:"S",from:1,to:40,color:"var(--band-s)",label:"S 帶 1–40",desc:"為一泊而啟程"},
+{key:"A",from:41,to:100,color:"var(--band-a)",label:"A 帶 41–100",desc:"擇時，終須一會"},
+{key:"B",from:101,to:160,color:"var(--band-b)",label:"B 帶 101–160",desc:"一方之定石"},
+{key:"C",from:161,to:200,color:"var(--band-c)",label:"C 帶 161–200",desc:"途上的安穩"}
 ];
 const BANDS_I=[
-{key:"S",from:1,to:12,color:"var(--band-s)",label:"S 帶 1–12",desc:"值得專程"},
-{key:"A",from:13,to:25,color:"var(--band-a)",label:"A 帶 13–25",desc:"擇期必去"},
-{key:"B",from:26,to:40,color:"var(--band-b)",label:"B 帶 26–40",desc:"區域優等生"},
-{key:"C",from:41,to:50,color:"var(--band-c)",label:"C 帶 41–50",desc:"順遊之選"}
+{key:"S",from:1,to:12,color:"var(--band-s)",label:"S 帶 1–12",desc:"為一泊而啟程"},
+{key:"A",from:13,to:25,color:"var(--band-a)",label:"A 帶 13–25",desc:"擇時，終須一會"},
+{key:"B",from:26,to:40,color:"var(--band-b)",label:"B 帶 26–40",desc:"一方之定石"},
+{key:"C",from:41,to:50,color:"var(--band-c)",label:"C 帶 41–50",desc:"途上的安穩"}
 ];
 const REGIONS=["全部","北海道","東北","關東","中部","關西","中國","四國","九州","沖繩"];
 const PRICE_MARK=["","$","$$","$$$","$$$$","$$$$$"];
@@ -944,7 +954,7 @@ function renderTrip(){
     let hit=false;SLOTS.forEach(s=>s.rows.forEach(r=>{if(norm(r[0])===norm(n))hit=true;}));
     return hit?`<span class="xref">定番</span>`:"";
   };
-  let html=`<div class="band-head"><span class="tag" style="background:var(--gold)">過去</span><span class="desc">已驗證的日本住宿・評分 1–5，5+++ 為個人最高——陸續補完中</span></div>`;
+  let html=`<div class="band-head"><span class="tag" style="background:var(--gold)">過去</span><span class="desc">實際投宿的記錄・五分為個人最高，陸續增補</span></div>`;
   list.forEach(s=>{
     const [name,loc,region,score,comment]=s;
     html+=`<div class="row" style="--band-color:${scoreColor(score)}">
