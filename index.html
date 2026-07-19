@@ -135,6 +135,7 @@ select.flt.on{border-color:var(--gold);color:var(--gold);}
 .band-head .desc,.region-head .desc{font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--ink-faint);letter-spacing:0;}
 .region-head .pin{width:15px;height:15px;flex:0 0 auto;color:var(--gold);}
 .row{
+  position:relative;
   display:grid;
   grid-template-columns:58px 1fr;
   gap:0 14px;
@@ -154,7 +155,7 @@ select.flt.on{border-color:var(--gold);color:var(--gold);}
 }
 .rank small{display:block;font-size:10px;color:var(--ink-faint);font-family:'Noto Sans TC',sans-serif;font-weight:400;letter-spacing:.1em;margin-top:4px;}
 .rmain{min-width:0;}
-.rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;}
+.rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding-right:38px;}
 .rname{font-weight:700;font-size:15px;color:var(--ink);}
 .rname .mark{color:var(--shu);font-weight:700;margin-right:2px;}
 .rloc{font-size:12px;color:var(--ink-faint);}
@@ -167,11 +168,14 @@ select.flt.on{border-color:var(--gold);color:var(--gold);}
 .lev.soft{border-style:dashed;}
 .rnote{margin-top:7px;font-size:13px;color:var(--ink-soft);line-height:1.7;}
 .maplink{
-  font-size:11.5px;color:var(--gold);text-decoration:none;
-  border:1px solid var(--chip-line);border-radius:4px;padding:2px 9px;background:var(--chip);
-  white-space:nowrap;transition:background .2s,color .2s;
+  position:absolute;top:10px;right:10px;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  color:var(--gold);text-decoration:none;
+  border:1px solid var(--chip-line);border-radius:8px;background:var(--chip);
+  transition:background .2s,color .2s,border-color .2s;
 }
-.maplink:hover{background:var(--gold);color:var(--bg);}
+.maplink svg{width:16px;height:16px;}
+.maplink:hover{background:var(--gold);border-color:var(--gold);color:var(--bg);}
 .maplink:focus-visible{outline:2px solid var(--shu);}
 .price{
   font-size:12px;font-weight:700;letter-spacing:.06em;
@@ -194,6 +198,7 @@ select.flt.on{border-color:var(--gold);color:var(--gold);}
   background:var(--card);font-size:13px;color:var(--ink-soft);border-radius:0 6px 6px 0;line-height:1.7;
 }
 .slot-row{
+  position:relative;
   display:grid;grid-template-columns:36px 1fr;gap:0 12px;
   background:var(--card);border:1px solid var(--line);border-radius:8px;
   padding:11px 15px;margin-bottom:7px;
@@ -698,6 +703,7 @@ const BANDS=[
 const REGIONS=["全部","北海道","東北","關東","中部","關西","中國","四國","九州","沖繩"];
 const PRICE_MARK=["","$","$$","$$$","$$$$","$$$$$"];
 const PIN='<svg class="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+const MAP_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 
 const state={tab:"main",view:"rank",region:"全部",q:"",group:"",series:"",prices:new Set()};
 const $=id=>document.getElementById(id);
@@ -724,8 +730,8 @@ function rowHTML(h){
         <span class="rname">${mark?`<span class="mark">${mark}</span>`:""}${name}</span>
         <span class="rloc">${loc}｜${group}${series&&series!==group?"・"+series:""}</span>
         <span class="price">${PRICE_MARK[price]}</span>
-        <a class="maplink" href="${gmap(name,loc)}" target="_blank" rel="noopener">地圖 ↗</a>
       </div>
+      <a class="maplink" href="${gmap(name,loc)}" target="_blank" rel="noopener" aria-label="在 Google Maps 開啟 ${name}" title="地圖">${MAP_ICON}</a>
       <div class="rchips">${levChips(lev)}</div>
       <div class="rnote">${note}</div>
     </div>
@@ -788,7 +794,8 @@ function renderSlots(){
       ${rows.map(r=>`<div class="slot-row">
         <div class="slot-rank">${s.rows.indexOf(r)+1}</div>
         <div class="rmain">
-          <div class="rtitle"><span class="rname">${r[0]}</span><span class="rloc">${r[1]}</span><span class="price">${PRICE_MARK[r[3]]}</span><a class="maplink" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">地圖 ↗</a></div>
+          <div class="rtitle"><span class="rname">${r[0]}</span><span class="rloc">${r[1]}</span><span class="price">${PRICE_MARK[r[3]]}</span></div>
+          <a class="maplink" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener" aria-label="在 Google Maps 開啟 ${r[0]}" title="地圖">${MAP_ICON}</a>
           <div class="rnote">${r[4]}</div>
         </div>
       </div>`).join("")}
