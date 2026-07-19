@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本飯店總榜 — Tim 的百選與槽位</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F5F0;
+  --card:#FFFFFF;
+  --ink:#1C2733;
+  --ink-soft:#4A5568;
+  --ink-faint:#8A93A0;
+  --indigo:#2B4C7E;
+  --indigo-deep:#1E3255;
+  --shu:#B5432A;
+  --band-s:#1E3255;
+  --band-a:#2E6E65;
+  --band-b:#9A7B2F;
+  --band-c:#6E7681;
+  --line:#E3E1D8;
+  --chip:#EEF1F6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:14px;
+  line-height:1.55;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px;}
+
+/* ---------- header ---------- */
+header{padding:34px 0 10px;}
+.eyebrow{
+  font-family:'Shippori Mincho',serif;
+  letter-spacing:.45em;
+  font-size:12px;
+  color:var(--indigo);
+  margin-bottom:10px;
+}
+h1{
+  font-family:'Shippori Mincho',serif;
+  font-weight:800;
+  font-size:clamp(26px,5vw,40px);
+  letter-spacing:.06em;
+  line-height:1.25;
+}
+.subtitle{color:var(--ink-soft);margin-top:8px;max-width:720px;}
+.legend{
+  display:flex;flex-wrap:wrap;gap:8px 14px;
+  margin-top:14px;font-size:12px;color:var(--ink-soft);
+}
+.legend b{color:var(--shu);font-weight:700;}
+
+/* ---------- controls ---------- */
+.controls{
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(var(--paper) 88%,rgba(246,245,240,0));
+  padding:12px 0 14px;
+}
+.ctrl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;}
+.seg{display:inline-flex;border:1px solid var(--indigo);border-radius:6px;overflow:hidden;}
+.seg button{
+  background:transparent;border:0;padding:7px 16px;cursor:pointer;
+  font-family:'Noto Sans TC',sans-serif;font-size:13px;font-weight:500;color:var(--indigo);
+}
+.seg button.on{background:var(--indigo);color:#fff;}
+.seg button:focus-visible{outline:2px solid var(--shu);outline-offset:-2px;}
+#search{
+  flex:1;min-width:150px;max-width:260px;
+  border:1px solid var(--line);border-radius:6px;
+  padding:7px 12px;font-size:13px;background:var(--card);color:var(--ink);
+  font-family:'Noto Sans TC',sans-serif;
+}
+#search:focus{outline:2px solid var(--indigo);border-color:var(--indigo);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{
+  border:1px solid var(--line);background:var(--card);border-radius:20px;
+  padding:4px 13px;font-size:12.5px;cursor:pointer;color:var(--ink-soft);
+  font-family:'Noto Sans TC',sans-serif;
+}
+.chip.on{background:var(--indigo);border-color:var(--indigo);color:#fff;}
+.chip:focus-visible{outline:2px solid var(--shu);}
+.count{font-size:12px;color:var(--ink-faint);margin-left:auto;}
+
+/* ---------- rows ---------- */
+.band-head,.region-head{
+  font-family:'Shippori Mincho',serif;
+  font-weight:600;font-size:16px;letter-spacing:.12em;
+  margin:26px 0 10px;display:flex;align-items:center;gap:10px;
+}
+.band-head .tag,.region-head .tag{
+  color:#fff;font-size:12px;letter-spacing:.15em;
+  padding:3px 12px;border-radius:4px;font-family:'Noto Sans TC',sans-serif;
+}
+.band-head span.desc{font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--ink-faint);letter-spacing:0;}
+.row{
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:0 14px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-left:4px solid var(--band-color,var(--band-c));
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:8px;
+}
+.rank{
+  font-family:'Shippori Mincho',serif;
+  font-weight:800;font-size:24px;color:var(--band-color,var(--ink));
+  line-height:1;padding-top:3px;text-align:right;
+}
+.rank small{display:block;font-size:10px;color:var(--ink-faint);font-family:'Noto Sans TC',sans-serif;font-weight:400;letter-spacing:.1em;margin-top:3px;}
+.rmain{min-width:0;}
+.rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;}
+.rname{font-weight:700;font-size:15px;}
+.rname .mark{color:var(--shu);font-weight:700;margin-right:2px;}
+.rloc{font-size:12px;color:var(--ink-faint);}
+.rchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.lev{
+  font-size:11px;padding:2px 9px;border-radius:4px;
+  background:var(--chip);color:var(--indigo-deep);border:1px solid #DCE3EE;
+}
+.lev.none{color:var(--ink-faint);background:#F1F1EC;border-color:var(--line);}
+.lev.soft{border-style:dashed;}
+.fit{
+  font-size:11px;padding:2px 9px;border-radius:4px;border:1px solid var(--line);color:var(--ink-soft);background:#FAFAF6;
+}
+.rnote{margin-top:6px;font-size:13px;color:var(--ink-soft);}
+.maplink{
+  font-size:11.5px;color:var(--indigo);text-decoration:none;
+  border:1px solid #DCE3EE;border-radius:4px;padding:1px 8px;background:#F4F7FB;
+  white-space:nowrap;
+}
+.maplink:hover{background:var(--indigo);color:#fff;}
+.maplink:focus-visible{outline:2px solid var(--shu);}
+.price{
+  font-size:12px;font-weight:700;letter-spacing:.05em;
+  color:#2E6E65;white-space:nowrap;
+}
+
+/* ---------- slots ---------- */
+.slot-section{margin-top:34px;}
+.slot-title{
+  font-family:'Shippori Mincho',serif;font-weight:800;
+  font-size:20px;letter-spacing:.08em;color:var(--indigo-deep);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.slot-title .num{
+  font-size:13px;color:var(--shu);letter-spacing:.3em;font-weight:600;
+}
+.slot-use{
+  margin:8px 0 12px;padding:10px 14px;border-left:3px solid var(--indigo);
+  background:#EFF2F7;font-size:13px;color:var(--ink-soft);border-radius:0 6px 6px 0;
+}
+.slot-row{
+  display:grid;grid-template-columns:34px 1fr;gap:0 12px;
+  background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:10px 14px;margin-bottom:7px;
+}
+.slot-rank{
+  font-family:'Shippori Mincho',serif;font-weight:800;font-size:18px;
+  color:var(--indigo);text-align:right;padding-top:2px;
+}
+.rules{
+  margin-top:40px;background:var(--indigo-deep);color:#E9EDF4;
+  border-radius:10px;padding:22px 24px;
+}
+.rules h2{font-family:'Shippori Mincho',serif;letter-spacing:.15em;font-size:17px;margin-bottom:12px;color:#fff;}
+.rules ol{padding-left:20px;display:grid;gap:8px;font-size:13.5px;}
+.rules b{color:#F4C97B;font-weight:600;}
+.hidden{display:none!important;}
+.empty{
+  text-align:center;color:var(--ink-faint);padding:40px 0;font-size:13px;
+}
+footer{margin-top:36px;font-size:11.5px;color:var(--ink-faint);line-height:1.7;}
+@media (max-width:560px){
+  .row{grid-template-columns:44px 1fr;padding:11px 12px;}
+  .rank{font-size:20px;}
+  .count{width:100%;margin-left:0;}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">日本飯店総覧</div>
+  <h1>Tim 的日本飯店總榜<br>百選 × 六大槽位</h1>
+  <p class="subtitle">主榜收「值得為它安排行程」的一百間;槽位收「行程裡自然用到」的工具層。評估軸:口碑 × 夫妻適配(低移動) × 槓桿 × CP × 地區特別性,並以你 35 間住宿自評為對標基準。</p>
+  <div class="legend">
+    <span><b>★</b> 住過</span>
+    <span><b>◎</b> 已訂/定案</span>
+    <span><b>⏳</b> 2027 候選</span>
+    <span>槓桿:實線=保證福利,虛線=軟福利(不保證)</span>
+    <span style="width:100%">房價(台幣/晚,平日雙人房概估):<b>$</b> 10K內 ・ <b>$$</b> 15K內 ・ <b>$$$</b> 20K內 ・ <b>$$$$</b> 30K內 ・ <b>$$$$$</b> 30K+;旺季可能上跳一級,料理旅館為兩人一泊二食總額</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="ctrl-row">
+    <div class="seg" role="tablist" aria-label="榜單切換">
+      <button id="tab-main" class="on">總榜 Top 100</button>
+      <button id="tab-slot">槽位系列</button>
+    </div>
+    <div class="seg" id="viewSeg" aria-label="檢視方式">
+      <button id="view-rank" class="on">排名檢視</button>
+      <button id="view-region">地區檢視</button>
+    </div>
+    <input id="search" type="search" placeholder="搜尋飯店、城市、集團…" aria-label="搜尋">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="chips" id="regionChips" aria-label="地區篩選"></div>
+</div>
+
+<main id="mainList"></main>
+<main id="slotList" class="hidden"></main>
+
+<footer>
+  資料基準:2026 年 7 月。槓桿前提:IHG 鑽卡(+CSU)、Marriott 白金、GHA 鈦卡、Accor 白金(效期內)、旅遊顧問特約渠道(頂級品牌線保證福利;中間層為軟福利)。排名為綜合判斷,同帶內名次差距意義不大,跨帶差距才代表實質差異。
+</footer>
+</div>
+
+<script>
+/* rank, name, loc, region, group, leverage(code), note, fit, mark */
+/* leverage codes: D=IHG鑽, M=萬豪白金, C=顧問特約, C?=軟福利, T=GHA鈦, A=Accor白金, -=無 */
+const HOTELS=[
+[1,"Ritz-Carlton 日光","日光・栃木","關東","Marriott",["M","C"],"湖畔溫泉RC,日本RC口碑頂點;鎖紅葉或初夏窗口","◎ 未踏區+零移動",""],
+[2,"Waldorf Astoria 大阪","大阪・大阪","關西","Hilton",["C"],"Impresario 特約讓頂奢附帶早餐+100U,大阪站4分","◎ 常去大阪必收",""],
+[3,"Ritz-Carlton 福岡","福岡・福岡","九州","Marriott",["M"],"你的 5+++ 滿分錨點,全榜城市型的量尺","◎ 已驗證","★"],
+[4,"星のや竹富島","竹富島・沖繩","沖繩","星野",["-"],"石垣搭船15分的赤瓦村落villa;星野溢價前科,先查餐評+訂可退","◎ 石垣行可加購",""],
+[5,"InterContinental 札幌","札幌・北海道","北海道","IHG",["D"],"2025/10新開,CSU主場最新血,149室小體量","◎ 冬季再訪的理由",""],
+[6,"帝國ホテル 京都","京都・京都","關西","帝國",["-"],"祇園文化財55室,稀缺性十年級;無槓桿由稀缺補足","◎ 需提早訂",""],
+[7,"JW Marriott 東京","港區・東京","關東","Marriott",["M"],"2025/10全新,高輪站正前,羽田20分","◎ 出差可疊",""],
+[8,"Rosewood 宮古島","宮古島・沖繩","沖繩","Rosewood",["C"],"日本唯一Rosewood全villa,Elite渠道可用","○ 需專程轉機",""],
+[9,"Conrad 名古屋","名古屋・愛知","中部","Hilton",["C"],"2026/7全新,榮站直結","◎ 低移動",""],
+[10,"Park Hyatt 京都","京都・京都","關西","Hyatt",["C"],"Privé 早餐+100U補貼最貴短板,體驗頂配","○ 二寧坂坡道行李",""],
+[11,"InterContinental 別府","別府・大分","九州","IHG",["D"],"你評5分的溫泉IC典範","◎ 已驗證,重訪值高","★"],
+[12,"ANA InterContinental 石垣","石垣・沖繩","沖繩","IHG",["D"],"CSU已套,離島IC","◎ 9月入住","◎"],
+[13,"HOTEL THE MITSUI KYOTO","京都・京都","關西","三井",["-"],"私有溫泉SPA+日系服務,價格比Aman/FS理性","◎ 雨天不怕",""],
+[14,"Fairmont 東京","港區・東京","關東","Accor",["A"],"2025/7新開全房面海;Accor白金效期內可疊SNU","○",""],
+[15,"藤屋","銀山溫泉・山形","東北","獨立",["-"],"隈研吾8室,雪見稀缺全日本級","◎ 1月錨點","◎"],
+[16,"Four Seasons 京都","京都・京都","關西","Four Seasons",["C"],"FS特約業界最實,800年積翠園池庭","○",""],
+[17,"翠嵐 Luxury Collection","嵐山・京都","關西","Marriott",["M"],"保津川畔,夜晚人潮散去後的私家嵐山","◎",""],
+[18,"Aman 京都","京都・京都","關西","Aman",["-"],"鷹峯森林祕境,特別性滿分、CP最低","○ 錢包問題",""],
+[19,"ANA InterContinental 安比高原","八幡平・岩手","東北","IHG",["D"],"雪季ski-in/out的CSU標的","○ 限冬季",""],
+[20,"Ritz-Carlton 沖繩","名護・沖繩","沖繩","Marriott",["M"],"穩定RC水準;無私灘是硬扣分","○",""],
+[21,"Iraph Sui Luxury Collection","伊良部島・沖繩","沖繩","Marriott",["M"],"私池villa,與宮古島Rosewood同趟","○ 需專程",""],
+[22,"The Okura Tokyo(Heritage)","港區・東京","關東","Okura",["-"],"日系服務天花板,價格低同級外資三成","◎ CP",""],
+[23,"InterContinental 大阪","大阪・大阪","關西","IHG",["D"],"城市IC天花板,CSU換套房價值高,Club佳","◎ 工具+體驗兼得",""],
+[24,"Conrad 東京","汐留・東京","關東","Hilton",["C"],"灣景經典+Impresario特約","◎",""],
+[25,"Conrad 大阪","中之島・大阪","關西","Hilton",["C"],"40樓景觀,常態甜價+特約","◎",""],
+[26,"St. Regis 大阪","大阪・大阪","關西","Marriott",["M"],"Butler服務入門票,價格理性","◎",""],
+[27,"東京ステーションホテル","丸之內・東京","關東","獨立",["-"],"文化財+車站內零移動;你St Pancras 4分的CP正解版","◎ 你的語法",""],
+[28,"Peninsula 東京","有樂町・東京","關東","半島",["C"],"PenClub齊裝(早餐+100U+升等)補回硬體年紀","○",""],
+[29,"Park Hyatt 東京","新宿・東京","關東","Hyatt",["C"],"2025/12改裝重生+Privé;房價也重生了","○",""],
+[30,"星のや京都","嵐山・京都","關西","星野",["-"],"搭專屬小船入場的水畔旅館","○ 移動儀式感兩面刃",""],
+[31,"大阪 Marriott 都","阿倍野・大阪","關西","Marriott",["M"],"你評5分:早餐好、view好;溢價買景","○ 已驗證","★"],
+[32,"Palace Hotel 東京","丸之內・東京","關東","獨立",["-"],"護城河畔露臺房,日系獨立標竿","◎",""],
+[33,"Amanemu","志摩・三重","中部","Aman",["-"],"全室溫泉suite的Aman,靜養天花板","○",""],
+[34,"Six Senses 京都","京都・京都","關西","IHG",["D"],"體驗獨特;點數兌換率差,鑽卡禮遇有限","○",""],
+[35,"Mandarin Oriental 東京","日本橋・東京","關東","文華東方",["C"],"Fan Club特約,老牌穩定高分","○",""],
+[36,"別邸朧月夜","道後・愛媛","四國","獨立",["-"],"全室露天風呂,道後最高階","◎ 2027錨點","⏳"],
+[37,"RC Reserve 東山 Niseko","新雪谷・北海道","北海道","Marriott",["M"],"日本唯一Reserve,全球個位數","△ 不滑雪砍半",""],
+[38,"Bulgari 東京","八重洲・東京","關東","Marriott",["M"],"服務評價驚人地高;25萬日圓起","△ CP",""],
+[39,"ANA InterContinental 東京","赤坂・東京","關東","IHG",["D"],"Club lounge營運成熟,可靠工具","◎ 東京工具",""],
+[40,"Hyatt Regency 瀬良垣島","恩納・沖繩","沖繩","Hyatt",["C?"],"全島型resort,度假CP王;MB Gallery好評的上位版","◎",""],
+[41,"星のや輕井澤","輕井澤・長野","中部","星野",["-"],"谷間水波房靜養","◎ 未去過",""],
+[42,"Patina 大阪","大阪・大阪","關西","GHA",["T"],"鈦卡升等+D$;新品牌仍在磨合","○",""],
+[43,"Andaz 東京","虎之門・東京","關東","Hyatt",["C?"],"精品定位;訂前確認Privé名單","○",""],
+[44,"Bellustar 東京","新宿・東京","關東","GHA",["T"],"45-47樓雲端視野;一樓是歌舞伎町正中心","○ 出入口體驗打折",""],
+[45,"瀬戸内リトリート青凪","松山・愛媛","四國","獨立",["-"],"安藤忠雄7室美術館旅","◎ 2027可疊","⏳"],
+[46,"Azumi Setoda","瀨戶田・廣島","中國","獨立",["-"],"Aman創辦人新作,島波海道上","◎ 2027正中動線","⏳"],
+[47,"Aman 東京","大手町・東京","關東","Aman",["-"],"都會Aman大浴場氣勢驚人;天價","△ 東京太熟",""],
+[48,"Janu 東京","麻布台・東京","關東","Aman",["-"],"Aman姊妹牌,4000㎡ spa,便宜三成","○",""],
+[49,"W 大阪","心齋橋・大阪","關西","Marriott",["M"],"安藤外觀,設計系潮向","○ 看口味",""],
+[50,"Prince Gallery 紀尾井町","千代田・東京","關東","Marriott",["M"],"Luxury Collection高樓景,常有甜價","◎ 東京CP",""],
+[51,"ROKU KYOTO(LXR)","京都・京都","關西","Hilton",["C"],"鷹峯溫水池+Impresario","○ 離市區遠",""],
+[52,"Edition 虎之門","港區・東京","關東","Marriott",["M"],"設計系,屋頂酒吧佳","○",""],
+[53,"星のや東京","大手町・東京","關東","星野",["-"],"塔型旅館+頂樓天然溫泉露天","○",""],
+[54,"InterContinental 橫濱 Pier 8","橫濱・神奈川","關東","IHG",["D"],"2019年小體量碼頭質感店","○",""],
+[55,"Mesm 東京","竹芝・東京","關東","Marriott",["M"],"設計CP,濱離宮景","◎ 東京工具",""],
+[56,"雅叙園東京","目黑・東京","關東","獨立",["-"],"全室80㎡起+百段階段,空間怪物","◎",""],
+[57,"Westin 仙台","仙台・宮城","東北","Marriott",["M"],"東北最高樓,白金保證福利","◎ 1月定案","◎"],
+[58,"Okura 京都岡崎別邸","京都・京都","關西","Okura",["-"],"平安神宮旁小體量,安靜","◎",""],
+[59,"Sheraton 鹿兒島","鹿兒島・鹿兒島","九州","Marriott",["M"],"降級越級範本:2021新硬體+天然溫泉,喜來登價買城市IC體驗","◎ 空白縣優先驗證",""],
+[60,"帝國ホテル 東京","日比谷・東京","關東","帝國",["-"],"本館建替中,塔館營業","○ 過渡期",""],
+[61,"New Otani「禅」","紀尾井町・東京","關東","獨立",["-"],"館中館隱藏解,服務到位價格漂亮","○",""],
+[62,"華水亭","皆生溫泉・鳥取","中國","獨立",["-"],"活松葉蟹會席+海景露天,自駕停車無虞","◎ 11月已定","◎"],
+[63,"Hyatt Regency 箱根","強羅・神奈川","關東","Hyatt",["C?"],"溫泉+暖爐lounge靜養","◎ 未去箱根",""],
+[64,"Hyatt Regency 京都","東山・京都","關西","Hyatt",["C?"],"七條,服務口碑CP","◎",""],
+[65,"InterContinental 東京Bay","竹芝・東京","關東","IHG",["D"],"2026/3翻新完;撿翻新房+鑽卡甜價","○ 工具",""],
+[66,"Swissôtel 南海","難波・大阪","關西","Accor",["A"],"難波站正上方,位置絕對值","◎ 工具",""],
+[67,"Kimpton 新宿","新宿・東京","關東","IHG",["D"],"鑽卡在精品系反而被重視,兌換合理","○",""],
+[68,"JRタワーホテル日航札幌","札幌・北海道","北海道","Okura/JR",["-"],"你評4.5:站直結+22樓展望大浴場+早餐","◎ 已驗證工具王","★"],
+[69,"ベラビスタ尾道","尾道・廣島","中國","獨立",["-"],"瀨戶內丘上resort","◎ 2027案","⏳"],
+[70,"Hilton 廣島","廣島・廣島","中國","Hilton",["C?"],"2022新硬體;軟福利當彩蛋","◎ 2027工具首選",""],
+[71,"Westin 都京都","蹴上・京都","關西","Marriott",["M"],"改裝後京都連鎖優等生","○",""],
+[72,"ふふ 日光/河口湖","日光・栃木 他","關東","獨立",["-"],"一泊二食槽位的洋和折衷頂配","◎",""],
+[73,"Hilton 長崎","長崎・長崎","九州","Hilton",["C?"],"站直結新硬體","○",""],
+[74,"Hilton 橫濱","橫濱・神奈川","關東","Hilton",["C?"],"2023年新","○",""],
+[75,"InterContinental 橫濱 Grand","橫濱・神奈川","關東","IHG",["D"],"帆型地標;1991年,情懷>體驗","△",""],
+[76,"ANA InterContinental 萬座","恩納・沖繩","沖繩","IHG",["D"],"岬角絕景,硬體世代舊","○ 點數換才住",""],
+[77,"Park Hyatt Niseko","新雪谷・北海道","北海道","Hyatt",["C"],"雪季專用","△",""],
+[78,"Hilton 沖繩瀬底","本部・沖繩","沖繩","Hilton",["C?"],"你評4.5:房不錯、CP高、早餐好吃;偏遠可接受","◎ 已驗證","★"],
+[79,"Grand Hyatt 東京","六本木・東京","關東","Hyatt",["C?"],"城市穩定解","○",""],
+[80,"Grand Hyatt 福岡","福岡・福岡","九州","Hyatt",["C?"],"Canal City直結","○",""],
+[81,"The Kahala 橫濱","港未來・神奈川","關東","獨立",["-"],"夏威夷血統日系營運,小眾質感","○",""],
+[82,"Westin 橫濱","橫濱・神奈川","關東","Marriott",["M"],"2022新+溫浴設施","○",""],
+[83,"Hyatt Regency 橫濱","橫濱・神奈川","關東","Hyatt",["C?"],"山下町新硬體","○",""],
+[84,"JW Marriott 奈良","奈良・奈良","關西","Marriott",["M"],"評價中上;奈良已去","○",""],
+[85,"Hotel Indigo 箱根強羅","箱根・神奈川","關東","IHG",["D"],"設計系溫泉,點數可換+鑽卡","◎",""],
+[86,"Sheraton 沖繩SunMarina","恩納・沖繩","沖繩","Marriott",["M"],"度假中規中矩","△",""],
+[87,"Sheraton 廣島","廣島・廣島","中國","Marriott",["M"],"站直結工具","○ 2027備選",""],
+[88,"Hilton 沖繩北谷","北谷・沖繩","沖繩","Hilton",["C?"],"美國村生活感","○",""],
+[89,"Hilton 福岡SeaHawk","福岡・福岡","九州","Hilton",["C?"],"灣景大箱","○",""],
+[90,"Westin 大阪","梅田・大阪","關西","Marriott",["M"],"老店穩定","△",""],
+[91,"Westin Rusutsu","留壽都・北海道","北海道","Marriott",["M"],"雪季全樓中樓房型","△ 限雪季",""],
+[92,"Hilton 東京","新宿・東京","關東","Hilton",["C?"],"位置實、福利虛","△ 工具",""],
+[93,"Hilton 大阪","梅田・大阪","關西","Hilton",["C?"],"同上,位置極佳","△ 工具",""],
+[94,"ひらまつ 賢島","志摩・三重","中部","獨立",["-"],"美食auberge,洋版一泊二食槽","○",""],
+[95,"ホテルニューグランド","橫濱・神奈川","關東","獨立",["-"],"1927年classic本館情懷","○",""],
+[96,"城山ホテル鹿児島","鹿兒島・鹿兒島","九州","獨立",["-"],"早餐日本一常連+櫻島view露天溫泉,在地名門","◎ 可與Sheraton鹿兒島組隊",""],
+[97,"Centara Grand 大阪","難波・大阪","關西","Centara",["-"],"2023年新硬體,難波圈","○",""],
+[98,"TRUNK(HOTEL) Yoyogi Park","澀谷・東京","關東","獨立",["-"],"面公園infinity pool,設計系話題店","○",""],
+[99,"Hotel Nikko Huis Ten Bosch","佐世保・長崎","九州","Okura",["-"],"你評4:遊園專用,整體還可以","○ 已驗證","★"],
+[100,"The Park Front Hotel(USJ)","大阪・大阪","關西","Marriott",["M"],"你評3.5:遊園專用","○ 已驗證","★"]
+];
+
+const SLOTS=[
+{num:"槽位一",title:"IHG 工具層(ANA Crowne Plaza 為主)",lev:"鑽卡保證早餐+升等",
+use:"有 ACP 的城市優先用它。全系硬體世代 2000s,期待穩定不期待驚喜。",
+rows:[
+["ANA Crowne Plaza 富山","富山・富山","中部","全日本ACP評價最高,城址公園旁;北陸自駕最佳基地"],
+["ANA Crowne Plaza 金澤","金澤・石川","中部","站兼六園口正面,比Hyatt Centric實用,停車動線順"],
+["ANA Crowne Plaza 米子","米子・鳥取","中國","山陰唯一像樣國際連鎖;11月既定工具,平面停車"],
+["ANA Crowne Plaza 神戶","新神戶・兵庫","關西","新幹線直結,房型偏大"],
+["ANA Crowne Plaza 岡山","岡山・岡山","中國","站前;與Granvia岡山二選一"],
+["ANA Crowne Plaza 廣島","廣島・廣島","中國","平和大通旁,中規中矩備案"],
+["ANA Crowne Plaza 千歲","千歲・北海道","北海道","新千歲機場工具泊"],
+["Hotel Indigo 犬山有樂苑","犬山・愛知","中部","編外:國寶犬山城旁+溫泉大浴場,鑽卡可用"]
+]},
+{num:"槽位二",title:"JR 車站共構系",lev:"無槓桿,位置是保證",
+use:"IHG 空白城市的補位首選;房間偏小是通則,用官網早鳥或甜價訂。",
+rows:[
+["★ JRタワーホテル日航札幌","札幌・北海道","北海道","你的4.5錨點:站直結+展望大浴場+早餐;本槽天花板"],
+["Hotel Associa 高山","高山・岐阜","中部","回應你的高山遺留問題:山景大浴場+自帶大停車場+40㎡級房"],
+["Hotel Granvia 京都","京都・京都","關西","京都站內零移動,雨天/大行李日最優解"],
+["THE BLOSSOM 博多","博多・福岡","九州","JR九州設計系+大浴場,比Granvia新一世代"],
+["Hotel Granvia 岡山","岡山・岡山","中國","11月回程前夜標準解;停車收費且繞,還車後入住最順"],
+["Hotel Metropolitan 丸之內","東京・東京","關東","東京站日本橋口直結高層景,低調優選"],
+["Hotel Granvia 廣島","廣島・廣島","中國","新幹線口直結,2027移動日工具"],
+["THE BLOSSOM 日比谷","東京・東京","關東","高層景+設計感CP黑馬;無大浴場"]
+]},
+{num:"槽位三",title:"指名制料理旅館(一泊二食額度)",lev:"指名制:餐評4.5+ × 泉質 × 停車",
+use:"一趟一晚。用「餐評+泉質+停車」選,不看品牌——由布院界3.5的教訓;滝乃家5+++是量尺。",
+rows:[
+["★ 登別 滝乃家","登別・北海道","北海道","你的5+++錨點:餐泉服務三位一體"],
+["◎ 藤屋","銀山溫泉・山形","東北","隈研吾8室雪見稀缺;1月錨點"],
+["◎ 華水亭","皆生溫泉・鳥取","中國","活松葉蟹會席+海景露天;11月已定"],
+["⏳ 別邸朧月夜","道後・愛媛","四國","全室露天,道後最高階;2027錨點"],
+["あさば","修善寺・靜岡","中部","能舞台面池,關東圈料理旅館公認頂點"],
+["忘れの里 雅叙苑","妙見溫泉・鹿兒島","九州","茅葺古民家野趣系天花板;與Sheraton鹿兒島組空白縣套裝"],
+["強羅花壇","箱根・神奈川","關東","箱根最高階老舖;未踏箱根可組兩晚對照"],
+["別邸仙壽庵","谷川溫泉・群馬","關東","Relais & Châteaux,全室露天+雪見窗"]
+]},
+{num:"槽位四",title:"OMO 街文化基地(星野副牌)",lev:"無槓桿,CP定位",
+use:"「今晚想出門吃在地」的夜。房小、多數無浴缸;Groove 4.5證明新潮+交通可補償。與野乃互斥:出門選OMO,窩著泡湯選野乃。",
+rows:[
+["OMO7 大阪","新今宮・大阪","關西","旗艦+有大浴場(OMO罕見);新世界串炸走路圈"],
+["OMO5 京都三条","京都・京都","關西","三条商店街圈,鴨川5分;不住頂奢的京都夜最優解"],
+["OMO3 淺草","淺草・東京","關東","屋頂晴空塔景,雷門3分,CP極高"],
+["OMO7 旭川","旭川・北海道","北海道","道北基地,冬季道北案可用"],
+["OMO5 沖繩那霸","那霸・沖繩","沖繩","國際通旁,離島行程前後夜工具"]
+]},
+{num:"槽位五",title:"野乃/Dormy Inn 系(自駕工具泊)",lev:"無槓桿,函數全包型",
+use:"天然溫泉大浴場+名物早餐+免費夜鳴拉麵+自駕友善——你的加分項全打包。自駕移動日一晚,不是主菜。",
+rows:[
+["御宿 野乃 松江","松江・島根","中國","11月山陰正中:宍道湖圈+境港海鮮早餐;機動備選"],
+["御宿 野乃 金澤","金澤・石川","中部","近江町市場圈,早餐與市場同源"],
+["Dormy Inn PREMIUM 小樽","小樽・北海道","北海道","Sonia 4分(老但早餐好)的「不老版」替代解"],
+["御宿 野乃 京都七條","京都・京都","關西","京都站走路圈+溫泉,工具泊和風版"],
+["御宿 野乃 奈良","奈良・奈良","關西","猿澤池旁奈良町圈,重訪一晚解"],
+["御宿 野乃 富山","富山・富山","中部","與ACP富山同城二選一:保證福利選ACP,溫泉早餐選野乃"]
+]},
+{num:"槽位六",title:"Courtyard 萬怡(白金效期內)",lev:"白金保證早餐+升等",
+use:"白金效期內與ACP同牌型,且日本新開萬怡硬體比多數ACP新一世代;之後退化為軟福利賭局。",
+rows:[
+["Courtyard 福井","福井・福井","中部","2024新幹線延伸開業站前;福井縣當地最佳解"],
+["Courtyard 名古屋","名古屋・愛知","中部","2024年新,硬體輾壓同價位老店"],
+["Courtyard 札幌","札幌・北海道","北海道","2023年新,薄野圈"],
+["Courtyard 大阪本町","大阪・大阪","關西","2024年新,工具泊"],
+["Courtyard 東京站前","東京・東京","關東","位置型,東京工具層一員"]
+]}
+];
+
+const LEV_LABEL={D:"IHG鑽",M:"萬豪白金",C:"顧問特約","C?":"軟福利?",T:"GHA鈦",A:"Accor白金","-":"無槓桿"};
+const BANDS=[
+{key:"S",from:1,to:25,color:"var(--band-s)",label:"S 帶 1–25",desc:"值得專程"},
+{key:"A",from:26,to:50,color:"var(--band-a)",label:"A 帶 26–50",desc:"頂級體驗,擇期必去"},
+{key:"B",from:51,to:75,color:"var(--band-b)",label:"B 帶 51–75",desc:"區域優等生與行程既定組"},
+{key:"C",from:76,to:100,color:"var(--band-c)",label:"C 帶 76–100",desc:"工具層與情境選"}
+];
+const REGIONS=["全部","北海道","東北","關東","中部","關西","中國","四國","九州","沖繩"];
+
+const state={tab:"main",view:"rank",region:"全部",q:""};
+
+const $=id=>document.getElementById(id);
+
+function bandOf(rank){return BANDS.find(b=>rank>=b.from&&rank<=b.to);}
+
+const PRICE={
+1:"$$$$",2:"$$$$",3:"$$$$",4:"$$$$",5:"$$",6:"$$$$$",7:"$$$$",8:"$$$$$",9:"$$$",10:"$$$$$",
+11:"$$$",12:"$$$",13:"$$$$",14:"$$$",15:"$$$$$",16:"$$$$$",17:"$$$$$",18:"$$$$$",19:"$$$",20:"$$$$",
+21:"$$$$",22:"$$$",23:"$$$",24:"$$$",25:"$$$",26:"$$$",27:"$$$",28:"$$$$",29:"$$$$$",30:"$$$$$",
+31:"$$",32:"$$$$",33:"$$$$$",34:"$$$$$",35:"$$$$",36:"$$$$",37:"$$$$$",38:"$$$$$",39:"$$",40:"$$",
+41:"$$$$",42:"$$$",43:"$$$$",44:"$$$",45:"$$$$$",46:"$$$$",47:"$$$$$",48:"$$$$$",49:"$$",50:"$$",
+51:"$$$",52:"$$$",53:"$$$$",54:"$$",55:"$$",56:"$$$",57:"$",58:"$$$",59:"$",60:"$$$",
+61:"$$$",62:"$$$$",63:"$$$",64:"$$$",65:"$$",66:"$",67:"$$",68:"$",69:"$$$",70:"$",
+71:"$$",72:"$$$$",73:"$",74:"$",75:"$$",76:"$$",77:"$$$$$",78:"$$",79:"$$$",80:"$$",
+81:"$$$",82:"$",83:"$",84:"$$$",85:"$$",86:"$",87:"$",88:"$",89:"$",90:"$",
+91:"$$$",92:"$",93:"$",94:"$$$$",95:"$",96:"$",97:"$",98:"$$$",99:"$",100:"$"
+};
+const SLOT_PRICE={"槽位一":"$","槽位二":"$","槽位三":"$$$$","槽位四":"$","槽位五":"$","槽位六":"$"};
+const PRICE_OVR={"Hotel Indigo 犬山有樂苑":"$$","藤屋":"$$$$$","あさば":"$$$$$","強羅花壇":"$$$$$"};
+
+function gmap(name,loc){
+  const clean=name.replace(/^[★◎⏳]\s*/,"").replace(/\(.*?\)/g," ").trim();
+  const city=(loc.split("・")[0]||"").replace(/\s*他$/,"");
+  return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(clean+" "+city);
+}
+
+function levChips(codes){
+  return codes.map(c=>{
+    const cls=c==="-"?"lev none":(c==="C?"?"lev soft":"lev");
+    return `<span class="${cls}">${LEV_LABEL[c]}</span>`;
+  }).join("");
+}
+
+function rowHTML(h){
+  const [rank,name,loc,region,group,lev,note,fit,mark]=h;
+  const b=bandOf(rank);
+  return `<div class="row" style="--band-color:${b.color}">
+    <div class="rank">${rank}<small>${b.key}帶</small></div>
+    <div class="rmain">
+      <div class="rtitle">
+        <span class="rname">${mark?`<span class="mark">${mark}</span>`:""}${name}</span>
+        <span class="rloc">${loc}｜${group}</span>
+        <span class="price">${PRICE[rank]||""}</span>
+        <a class="maplink" href="${gmap(name,loc)}" target="_blank" rel="noopener">地圖 ↗</a>
+      </div>
+      <div class="rchips">${levChips(lev)}<span class="fit">${fit}</span></div>
+      <div class="rnote">${note}</div>
+    </div>
+  </div>`;
+}
+
+function filtered(){
+  const q=state.q.trim().toLowerCase();
+  return HOTELS.filter(h=>{
+    if(state.region!=="全部"&&h[3]!==state.region)return false;
+    if(q){
+      const hay=(h[1]+h[2]+h[4]+h[6]).toLowerCase();
+      if(!hay.includes(q))return false;
+    }
+    return true;
+  });
+}
+
+function renderMain(){
+  const list=filtered();
+  $("count").textContent=`顯示 ${list.length} / 100 間`;
+  if(!list.length){$("mainList").innerHTML=`<div class="empty">沒有符合的飯店——換個地區或關鍵字試試。</div>`;return;}
+  let html="";
+  if(state.view==="rank"){
+    BANDS.forEach(b=>{
+      const seg=list.filter(h=>h[0]>=b.from&&h[0]<=b.to);
+      if(!seg.length)return;
+      html+=`<div class="band-head"><span class="tag" style="background:${b.color}">${b.label}</span><span class="desc">${b.desc}</span></div>`;
+      seg.forEach(h=>html+=rowHTML(h));
+    });
+  }else{
+    const order=REGIONS.slice(1);
+    order.forEach(r=>{
+      const seg=list.filter(h=>h[3]===r).sort((a,b)=>a[0]-b[0]);
+      if(!seg.length)return;
+      html+=`<div class="region-head"><span class="tag" style="background:var(--indigo)">${r}</span><span class="desc">${seg.length} 間</span></div>`;
+      seg.forEach(h=>html+=rowHTML(h));
+    });
+  }
+  $("mainList").innerHTML=html;
+}
+
+function renderSlots(){
+  const q=state.q.trim().toLowerCase();
+  let html="";
+  SLOTS.forEach(s=>{
+    const rows=s.rows.filter(r=>{
+      if(state.region!=="全部"&&r[2]!==state.region)return false;
+      if(q&&!(r[0]+r[1]+r[3]).toLowerCase().includes(q))return false;
+      return true;
+    });
+    if(!rows.length)return;
+    html+=`<section class="slot-section">
+      <div class="slot-title"><span class="num">${s.num}</span>${s.title}<span class="lev" style="align-self:center">${s.lev}</span></div>
+      <div class="slot-use">${s.use}</div>
+      ${rows.map((r,i)=>`<div class="slot-row">
+        <div class="slot-rank">${s.rows.indexOf(r)+1}</div>
+        <div class="rmain">
+          <div class="rtitle"><span class="rname">${r[0]}</span><span class="rloc">${r[1]}</span><span class="price">${PRICE_OVR[r[0].replace(/^[★◎⏳]\s*/,"")]||SLOT_PRICE[s.num]}</span><a class="maplink" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">地圖 ↗</a></div>
+          <div class="rnote">${r[3]}</div>
+        </div>
+      </div>`).join("")}
+    </section>`;
+  });
+  if(!html)html=`<div class="empty">沒有符合的槽位飯店。</div>`;
+  html+=`<div class="rules">
+    <h2>使用總則</h2>
+    <ol>
+      <li><b>同城衝突決策順序</b>:有IHG物件先用鑽卡(保證福利)→ IHG空白看JR系(保證位置)→ 白金效期內萬怡可平替 → 自駕移動日看野乃 → 想出門吃的夜選OMO。</li>
+      <li><b>料理旅館槽永遠指名制</b>,一趟一晚;訂前看餐評4.5+、泉質、停車三項,不看品牌名。</li>
+      <li><b>主榜與槽位的分工</b>:主榜是「為它安排行程」,槽位是「行程順手用到」;槽位物件再好也不值得專程。</li>
+      <li><b>自駕行程</b>一律把「停車便利」放進硬篩選——你的歷史扣分四次全來自停車。</li>
+    </ol>
+  </div>`;
+  $("slotList").innerHTML=html;
+  $("count").textContent="槽位系列:6 組";
+}
+
+function render(){
+  if(state.tab==="main"){
+    $("mainList").classList.remove("hidden");
+    $("slotList").classList.add("hidden");
+    $("viewSeg").style.visibility="visible";
+    renderMain();
+  }else{
+    $("mainList").classList.add("hidden");
+    $("slotList").classList.remove("hidden");
+    $("viewSeg").style.visibility="hidden";
+    renderSlots();
+  }
+}
+
+function buildChips(){
+  $("regionChips").innerHTML=REGIONS.map(r=>
+    `<button class="chip${r===state.region?" on":""}" data-r="${r}">${r}</button>`).join("");
+  document.querySelectorAll("#regionChips .chip").forEach(c=>{
+    c.addEventListener("click",()=>{state.region=c.dataset.r;buildChips();render();});
+  });
+}
+
+$("tab-main").addEventListener("click",()=>{state.tab="main";$("tab-main").classList.add("on");$("tab-slot").classList.remove("on");render();});
+$("tab-slot").addEventListener("click",()=>{state.tab="slot";$("tab-slot").classList.add("on");$("tab-main").classList.remove("on");render();});
+$("view-rank").addEventListener("click",()=>{state.view="rank";$("view-rank").classList.add("on");$("view-region").classList.remove("on");render();});
+$("view-region").addEventListener("click",()=>{state.view="region";$("view-region").classList.add("on");$("view-rank").classList.remove("on");render();});
+$("search").addEventListener("input",e=>{state.q=e.target.value;render();});
+
+buildChips();
+render();
+</script>
+</body>
+</html>
