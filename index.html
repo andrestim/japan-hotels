@@ -179,8 +179,10 @@ select.flt.on{border-color:var(--gold);color:var(--gold);}
 .maplink:focus-visible{outline:2px solid var(--shu);}
 .price{
   font-size:12px;font-weight:700;letter-spacing:.06em;
-  color:var(--band-a);white-space:nowrap;
+  color:var(--gold);white-space:nowrap;
 }
+.legend .p{color:var(--gold);font-weight:700;letter-spacing:.04em;}
+.rank.stay{font-size:16px;letter-spacing:.02em;padding-top:8px;}
 
 /* ---------- 定番 ---------- */
 .slot-section{margin-top:36px;}
@@ -245,7 +247,7 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
     <span><b>◎</b> 已訂／定案</span>
     <span><b>⏳</b> 2027 候選</span>
     <span>會籍與渠道：實線＝保證福利，虛線＝軟福利（不保證）</span>
-    <span style="width:100%">房價（台幣／晚，平日雙人房概估）：<b>$</b> 10K內 ・ <b>$$</b> 15K內 ・ <b>$$$</b> 20K內 ・ <b>$$$$</b> 30K內 ・ <b>$$$$$</b> 30K+；旺季可能上跳一級，料理旅館為兩人一泊二食總額</span>
+    <span style="width:100%">房價（台幣／晚，平日雙人房概估）：<span class="p">$</span> 10K內 ・ <span class="p">$$</span> 15K內 ・ <span class="p">$$$</span> 20K內 ・ <span class="p">$$$$</span> 30K內 ・ <span class="p">$$$$$</span> 30K+；旺季可能上跳一級，料理旅館為兩人一泊二食總額</span>
   </div>
 </header>
 
@@ -254,6 +256,7 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
     <div class="seg" role="tablist" aria-label="榜單切換">
       <button id="tab-main" class="on">250選</button>
       <button id="tab-slot">定番</button>
+      <button id="tab-stay">住過</button>
     </div>
     <div class="seg" id="viewSeg" aria-label="檢視方式">
       <button id="view-rank" class="on">排名檢視</button>
@@ -275,6 +278,7 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
 
 <main id="mainList"></main>
 <main id="slotList" class="hidden"></main>
+<main id="stayList" class="hidden"></main>
 
 <footer>
   資料基準：2026年7月。會籍前提：IHG 鑽卡（＋CSU 套房券）、萬豪白金、GHA 鈦卡、Accor 白金、環哩匯（頂級品牌線保證早餐＋約 US$100 額度＋早入晚退＋視房況升等；中間層品牌為軟福利，不列入排名計算）。排名為綜合判斷：同帶內名次差距意義不大，跨帶差距才代表實質差異。新開業與翻新中物件變動快，訂房前請再查證。
@@ -400,7 +404,7 @@ const HOTELS=[
 [113,"大谷山荘","長門湯本・山口","中國","獨立","料理旅館",3,["-"],"長門湯本的名門大旅館，音信川畔的規模與服務兼得；安倍晉三－普丁會談會場的格。萩與元乃隅神社自駕圈——山口空白縣攻略的錨點，與界長門同街可對照，取穩定選大谷。",""],
 [114,"界 長門","長門湯本・山口","中國","星野","界",3,["-"],"藩主御茶屋屋敷概念的界，長門湯本溫泉街再生計畫的核心；建築與街並融合度高。星野系照例先查當期餐評——與大谷山荘同街二選一：界取設計與新，大谷取餐與格局。",""],
 [115,"ホテルリッジ","鳴門・德島","四國","獨立","獨立",3,["-"],"鳴門海峽高台僅10室的小體量resort，全室海峽景；大塚國際美術館的姊妹設施——美術館＋渦潮＋住宿的一日完整動線。四國北岸的隱藏名門，2027瀨戶內案的德島節點候補。",""],
-[116,"ラビスタ函館ベイ","函館・北海道","北海道","共立","ラビスタ",1,["-"],"「朝食日本一」常連的海鮮丼自助——イクラ蟹甘蝦現場放題；頂樓天然溫泉看函館港夜景。共立系的旗艦級發揮，金森倉庫步行圈；函館泊的標準答案，$級價格的體驗完成度驚人。",""],
+[116,"別邸仙壽庵","谷川溫泉・群馬","關東","獨立","料理旅館",4,["-"],"谷川岳山麓的Relais & Châteaux，全室露天＋全面雪見窗的玻璃迴廊；餐評常年4.5+。北關東自駕案的錨點——上牧水上線的一泊二食正解，停車無虞，雪季最完整。",""],
 [117,"TIAD, Autograph Collection","名古屋・愛知","中部","Marriott","Autograph",2,["M"],"2023年開業的設計系Autograph，榮商圈的新世代硬體；白金早餐＋升等照保證。名古屋長年缺高質感選項——Conrad開業前的名古屋最優解，之後退居設計系二選一。",""],
 [118,"The Kahala 橫濱","港未來・神奈川","關東","獨立","獨立",3,["-"],"夏威夷名門血統×日系營運，港未來的小眾質感選項；服務密度高、體量小，早餐與SPA評價穩定。橫濱泊的差異化答案——連鎖大箱之外的「有故事的一晚」。",""],
 [119,"Hilton 長崎","長崎・長崎","九州","Hilton","Hilton",1,["C?"],"長崎站直結的新硬體，出島與新地中華街步行圈；環哩匯中間層軟福利當彩蛋。西九州新幹線動線的終點站——長崎機能泊的標準解，$級價格的新房是主要理由。",""],
@@ -451,7 +455,7 @@ const HOTELS=[
 [164,"日光金谷ホテル","日光・栃木","關東","獨立","クラシック",2,["-"],"1873年創業的現存最古老リゾートクラシック，東照宮參道正中；百年食堂的虹鱒與百年咖哩是活的文化財。RC日光的對照組——一新一舊的日光兩晚行程成立，停車無虞。",""],
 [165,"アートビオトープ那須","那須・栃木","關東","獨立","設計系",4,["-"],"石上純也「水庭」的本體，藝術別墅＋工作室的複合體；建築與自然的實驗性全關東最高。二期倶樂部血統的餐飲團隊——那須高原的設計系錨點，「看水庭住一晚」成立。",""],
 [166,"草津溫泉 奈良屋","草津・群馬","關東","獨立","料理旅館",2,["-"],"湯畑旁的明治十年名門，白旗源泉的木造湯屋與番頭湯守制度；草津濃硫磺泉的正統體驗。湯畑徒步零分的位置——草津未踏的話，這裡就是第一晚的標準答案。",""],
-[167,"別邸仙壽庵","谷川溫泉・群馬","關東","獨立","料理旅館",4,["-"],"谷川岳山麓的Relais & Châteaux，全室露天＋全面雪見窗的玻璃迴廊；餐評常年4.5+。北關東自駕案的錨點——上牧水上線的一泊二食正解，停車無虞，雪季最完整。",""],
+[167,"ラビスタ函館ベイ","函館・北海道","北海道","共立","ラビスタ",1,["-"],"「朝食日本一」常連的海鮮丼自助＋頂樓天然溫泉看函館港夜景；金森倉庫步行圈，函館泊的標準答案。早餐是加分不是全部——房間是商務規格，所以停在B帶，但這個價位的完成度依然突出。",""],
 [168,"SHIROIYA HOTEL","前橋・群馬","關東","獨立","設計系",3,["-"],"藤本壯介改建的白井屋，Lawrence Weiner與杉本博司的藝術收藏；「前橋值得專程」的唯一理由級物件。餐飲（義法系）評價穩定——北關東的設計系飛地，建築迷的必修課。",""],
 [169,"あかん遊久の里 鶴雅","阿寒湖・北海道","北海道","獨立","料理旅館",2,["-"],"阿寒湖畔的鶴雅旗艦，庭園露天與湖景大浴場的規模道東第一；自助晚餐的海鮮水準穩定。丹頂鶴與摩周湖動線——道東自駕案的湖畔基地，冬季冰上活動加分。",""],
 [170,"しこつ湖鶴雅別荘 碧の座","支笏湖・北海道","北海道","獨立","料理旅館",4,["-"],"支笏湖畔的全suite頂級鶴雅，全室湖景露天＋專屬酒廊；水質日本一的湖就是主商品。新千歲機場40分的可及性——北海道進出日直接接頂級溫泉的最短路徑，雪季湖霧一見級。",""],
@@ -459,7 +463,7 @@ const HOTELS=[
 [172,"十勝川溫泉 三余庵","音更・北海道","北海道","獨立","料理旅館",3,["-"],"植物性モール泉的美人湯＋全11室的小體量；十勝食材懷石的餐評4.5+。帶廣豚丼與甜點巡禮動線——道東美食行程的一泊二食解，泉質稀缺性全國級。",""],
 [173,"新富良野プリンス","富良野・北海道","北海道","獨立","獨立",1,["-"],"富良野的定番基地，森林商店街「ニングルテラス」與纜車直結；硬體舊但腹地體驗完整。薰衣草季與雪季雙旺季——富良野美瑛自駕案的機能解，$級價格是理由。",""],
 [174,"雪ニセコ","新雪谷・北海道","北海道","獨立","設計系",3,["-"],"比羅夫十字路口的設計公寓式旅館，隈研吾監修；廚房套房對長住友善，餐廳陣容完整。滑雪動線徒步圈——新雪谷「不住頂奢」時的質感解，綠季甜價明顯。",""],
-[175,"センチュリーマリーナ函館","函館・北海道","北海道","獨立","獨立",1,["-"],"朝市正對面的新世代箱，「朝食日本一」競逐者——百種自助＋現做海鮮丼；頂樓天空湯看函館山。函館早餐雙雄的另一半——ラビスタ因夜景湯＋早餐雙強而高一帶，這裡以新硬體補位。",""],
+[175,"センチュリーマリーナ函館","函館・北海道","北海道","獨立","獨立",1,["-"],"朝市正對面的新世代箱，「朝食日本一」競逐者——百種自助＋現做海鮮丼；頂樓天空湯看函館山。與ラビスタ二選一：センチュリー取新硬體，ラビスタ取夜景湯；函館早餐雙雄。",""],
 [176,"星野リゾート 青森屋","三澤・青森","東北","星野","星野リゾート",2,["-"],"青森文化主題的度假村線，ねぶた與津輕三味線的演出密度高；池上露天「浮湯」是招牌。星野系照例先查餐評——奧入瀨與八甲田動線可疊，青森行程的娛樂型一晚。",""],
 [177,"乳頭溫泉鄉 鶴の湯","仙北・秋田","東北","獨立","料理旅館",1,["-"],"江戶時代湯治場的活化石，乳白色混浴露天與茅葺本陣；「秘湯」一詞的原點級存在。預約難度全國級、設施原始是前提——體驗的稀缺性換舒適性的極端案例，雪見期一生一見。",""],
 [178,"乳頭溫泉鄉 妙乃湯","仙北・秋田","東北","獨立","料理旅館",2,["-"],"鶴の湯的舒適版對照組：金の湯銀の湯雙泉＋溪畔露天，女性視角的細節設計；餐評穩定。乳頭七湯巡湯帖動線——「要秘湯但要現代舒適」的平衡解，與鶴の湯二選一。",""],
@@ -648,7 +652,7 @@ rows:[
 ["御宿 野乃 富山","富山・富山","中部",1,"與 ACP 富山同城二選一：保證福利選 ACP，溫泉早餐選野乃。"],
 ["御宿 野乃 大阪淀屋橋","淀屋橋・大阪","關西",1,"御堂筋圈的和風機能泊；大阪「要大浴場」的夜的答案。"],
 ["御宿 野乃 淺草","淺草・東京","關東",1,"最上階露天看晴空塔；東京裡稀有的「溫泉泊」機能解。"],
-["御宿 野乃 日本橋","日本橋・東京","關東",1,"日本橋圈的和風機能泊；東京站徒步圈的野乃據點。"],
+["御宿 野乃 なんば","難波・大阪","關西",1,"大阪日本橋（近鐵日本橋站 1 分）的和風機能泊；難波圈街食夜＋大浴場的組合位。"],
 ["ドーミーインPREMIUM 小樽","小樽・北海道","北海道",1,"Sonia 4 分（老但早餐好）的「不老版」替代解；運河圈同立地。"],
 ["ラビスタ函館ベイ","函館・北海道","北海道",1,"朝食日本一常連的海鮮丼自助＋頂樓溫泉看港；共立旗艦級。"],
 ["ラビスタ東京ベイ","豐洲・東京","關東",1,"豐洲市場旁的灣景大浴場；市場朝食動線的機能位。"],
@@ -680,7 +684,7 @@ rows:[
 ["ベッセルホテルカンパーナ沖縄","北谷・沖繩","沖繩",1,"北谷海岸徒步圈＋大浴場，沖繩食材自助早餐評價高；美國村動線的高 CP 位。"],
 ["ベッセルホテルカンパーナ京都五条","五条・京都","關西",1,"早餐評價京都價位帶前段；五条位置平實，自駕京都時停車動線比市中心順。"],
 ["都ホテル 京都八条","京都・京都","關西",1,"京都站八条口正面的近鐵系大箱，翻新後機能完整；Granvia 滿房時的同機能備位。"],
-["東急ステイ 京都新京極","河原町・京都","關西",1,"房內洗衣乾衣機＋微波爐的長住規格——連住多日的隱藏函數；新京極徒步圈。"],
+["東急ステイ 京都阪井座（四条河原町）","河原町・京都","關西",1,"房內洗衣乾衣機＋微波爐的長住規格——連住多日的隱藏函數；新京極內、河原町站 1 分。"],
 ["東急ステイ 銀座","銀座・東京","關東",1,"同長住規格的銀座據點；東京五晚以上的行程，房內洗衣的價值會浮現。"],
 ["羽田エクセルホテル東急","羽田・東京","關東",1,"第 2 航廈直結的唯一選項；紅眼與早班的零移動解，機能純度 100%。"],
 ["ザ・プリンス箱根芦ノ湖","箱根・神奈川","關東",2,"西武時代搶下的湖畔一等地＋溫泉大浴場；Prince 立地資產的代表作，箱根配菜位。"],
@@ -691,6 +695,31 @@ rows:[
 ]}
 ];
 
+/* 住過：[name, loc, region, score, comment]；評分 1–5，5+++ 為個人最高 */
+const STAYS=[
+["Ritz-Carlton 福岡","福岡・福岡","九州","5+++","很喜歡——城市型飯店的個人量尺。"],
+["登別 滝乃家","登別・北海道","北海道","5+++","超讚——料理旅館的個人量尺。"],
+["InterContinental 別府","別府・大分","九州","5","很棒，溫泉IC的典範。"],
+["大阪 Marriott 都","阿倍野・大阪","關西","5","讚、早餐好吃、view 好。"],
+["Groove Hotel 新宿","新宿・東京","關東","4.5","讚，新潮且交通方便，但房間無浴缸。"],
+["Hotel Clad 御殿場","御殿場・靜岡","中部","4.5","房小無浴缸但有大浴池，富士山景讚。"],
+["Sowaka 京都","祇園・京都","關西","4.5","新潮但無停車位、餐好吃。"],
+["JRタワーホテル日航札幌","札幌・北海道","北海道","4.5","不錯，早餐好吃。"],
+["Hilton 沖繩瀬底","本部・沖繩","沖繩","4.5","房間不錯、海景OK、CP值高；偏遠但早餐好吃。"],
+["富士河口湖 湖南荘","河口湖・山梨","中部","4","傳統體驗。"],
+["名古屋 Marriott Associa","名古屋・愛知","中部","4","還行，交通方便。"],
+["Hotel Nikko Huis Ten Bosch","佐世保・長崎","九州","4","遊園專用，整體還可以。"],
+["Hotel Sonia 小樽","小樽・北海道","北海道","4","老舊但早餐好吃。"],
+["横浜ベイシェラトン","橫濱・神奈川","關東","3.5","房間還行，其他中規中矩。"],
+["The Park Front Hotel","USJ・大阪","關西","3.5","遊園專用。"],
+["Hyatt Centric 金沢","金澤・石川","中部","3.5","設計別緻但其他普通，停車場不方便。"],
+["Hotel Wood 高山","高山・岐阜","中部","3.5","停車不便，極簡風；高山應有CP更高的選擇。"],
+["星野 由布院 界","由布院・大分","九州","3.5","小失望：餐跟景色不如預期、交通不便、價格極高——品牌溢價的教訓。"],
+["Cerulean Tower 東急","澀谷・東京","關東","3","傳統、房間小。"],
+["MB Gallery Chatan","北谷・沖繩","沖繩","—","CP值高、交通方便。"]
+];
+const SCORE_VAL={"5+++":5.3,"5":5,"4.5":4.5,"4":4,"3.5":3.5,"3":3,"—":0};
+function scoreColor(s){const v=SCORE_VAL[s]||0;return v>=5?"var(--band-s)":v>=4?"var(--band-a)":v>=3.5?"var(--band-b)":"var(--band-c)";}
 const SLOT_ORDER={"定番一":1,"定番二":2,"定番三":3,"定番四":4,"定番五":5,"定番六":6,"定番七":7};
 SLOTS.sort((a,b)=>SLOT_ORDER[a.num]-SLOT_ORDER[b.num]);
 const LEV_LABEL={D:"IHG鑽",M:"萬豪白金",C:"環哩匯","C?":"環哩匯・軟",T:"GHA鈦",A:"Accor白金","-":"無會籍"};
@@ -816,25 +845,53 @@ function renderSlots(){
   $("count").textContent=`定番：${SLOTS.length} 組・${total} 間`;
 }
 
+function renderStays(){
+  const q=state.q.trim().toLowerCase();
+  const list=STAYS.filter(s=>{
+    if(state.region!=="全部"&&s[2]!==state.region)return false;
+    if(q&&!(s[0]+s[1]+s[4]).toLowerCase().includes(q))return false;
+    return true;
+  }).slice().sort((a,b)=>(SCORE_VAL[b[3]]||0)-(SCORE_VAL[a[3]]||0));
+  $("count").textContent=`住過：${list.length} ／ ${STAYS.length} 間`;
+  if(!list.length){$("stayList").innerHTML=`<div class="empty">沒有符合的住宿。</div>`;return;}
+  let html=`<div class="band-head"><span class="tag" style="background:var(--gold)">住過</span><span class="desc">已驗證的日本住宿・評分 1–5，5+++ 為個人最高——陸續補完中</span></div>`;
+  list.forEach(s=>{
+    const [name,loc,region,score,comment]=s;
+    html+=`<div class="row" style="--band-color:${scoreColor(score)}">
+      <div class="rank stay" style="color:${scoreColor(score)}">${score}</div>
+      <div class="rmain">
+        <div class="rtitle"><span class="rname">${name}</span><span class="rloc">${loc}</span></div>
+        <div class="rnote">${comment}</div>
+      </div>
+      <a class="maplink" href="${gmap(name,loc)}" target="_blank" rel="noopener" aria-label="在 Google Maps 開啟 ${name}" title="地圖">${MAP_ICON}</a>
+    </div>`;
+  });
+  $("stayList").innerHTML=html;
+}
+
 function anyFilter(){return state.region!=="全部"||state.group||state.series||state.prices.size>0||state.q;}
 
 function render(){
-  const isMain=state.tab==="main";
-  $("mainList").classList.toggle("hidden",!isMain);
-  $("slotList").classList.toggle("hidden",isMain);
-  $("viewSeg").style.visibility=isMain?"visible":"hidden";
-  $("fltGroup").classList.toggle("hidden",!isMain);
-  $("fltSeries").classList.toggle("hidden",!isMain);
+  const t=state.tab;
+  $("mainList").classList.toggle("hidden",t!=="main");
+  $("slotList").classList.toggle("hidden",t!=="slot");
+  $("stayList").classList.toggle("hidden",t!=="stay");
+  $("viewSeg").style.visibility=t==="main"?"visible":"hidden";
+  $("fltGroup").classList.toggle("hidden",t!=="main");
+  $("fltSeries").classList.toggle("hidden",t!=="main");
+  $("priceChips").classList.toggle("hidden",t==="stay");
   $("clearBtn").classList.toggle("hidden",!anyFilter());
-  if(isMain)renderMain();else renderSlots();
+  if(t==="main")renderMain();else if(t==="slot")renderSlots();else renderStays();
 }
 
 function buildChips(){
   const counts={};
   if(state.tab==="main"){
     HOTELS.forEach(h=>counts[h[3]]=(counts[h[3]]||0)+1);
-  }else{
+  }else if(state.tab==="slot"){
     SLOTS.forEach(s=>s.rows.forEach(r=>counts[r[2]]=(counts[r[2]]||0)+1));
+  }else{
+    STAYS.forEach(s=>counts[s[2]]=(counts[s[2]]||0)+1);
   }
   $("regionChips").innerHTML=REGIONS.map(r=>{
     const n=r==="全部"?"":`<span class="n">${counts[r]||0}</span>`;
@@ -870,8 +927,14 @@ $("clearBtn").addEventListener("click",()=>{
   state.region="全部";state.group="";state.series="";state.prices.clear();state.q="";
   $("search").value="";buildChips();buildFilters();render();
 });
-$("tab-main").addEventListener("click",()=>{state.tab="main";$("tab-main").classList.add("on");$("tab-slot").classList.remove("on");buildChips();render();});
-$("tab-slot").addEventListener("click",()=>{state.tab="slot";$("tab-slot").classList.add("on");$("tab-main").classList.remove("on");buildChips();render();});
+function setTab(t){
+  state.tab=t;
+  ["main","slot","stay"].forEach(x=>$("tab-"+x).classList.toggle("on",x===t));
+  buildChips();render();
+}
+$("tab-main").addEventListener("click",()=>setTab("main"));
+$("tab-slot").addEventListener("click",()=>setTab("slot"));
+$("tab-stay").addEventListener("click",()=>setTab("stay"));
 $("view-rank").addEventListener("click",()=>{state.view="rank";$("view-rank").classList.add("on");$("view-region").classList.remove("on");render();});
 $("view-region").addEventListener("click",()=>{state.view="region";$("view-region").classList.add("on");$("view-rank").classList.remove("on");render();});
 $("search").addEventListener("input",e=>{state.q=e.target.value;render();});
