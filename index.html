@@ -137,7 +137,10 @@ h1 .h1-num{color:var(--gold);font-weight:700;padding:0 .04em;}
 }
 .dd-btn:hover{border-color:var(--gold-deep);color:var(--ink);}
 .dd-btn.on{border-color:var(--gold);color:var(--gold);}
-.dd-btn .car{font-size:9px;opacity:.7;}
+.dd-btn .car{display:inline-flex;align-items:center;opacity:.6;transition:transform .2s,opacity .2s;}
+.dd-btn .car svg{width:12px;height:12px;}
+.dd-btn:hover .car,.dd-btn.on .car{opacity:.85;}
+.dd-btn.open .car{transform:rotate(180deg);opacity:.9;}
 .dd-panel{
   position:absolute;top:calc(100% + 6px);left:0;
   background:var(--card-hi);border:1px solid var(--chip-line);border-radius:10px;
@@ -1047,7 +1050,7 @@ function ddDefs(){
 function renderDD(){
   const defs=ddDefs();
   $("ddRow").innerHTML=defs.map(d=>`<div class="dd">
-    <button class="dd-btn${d.set.size?" on":""}" data-t="${d.id}" aria-haspopup="listbox">${d.label}${d.set.size?`・${d.set.size}`:""}<span class="car">▼</span></button>
+    <button class="dd-btn${d.set.size?" on":""}${openDD===d.id?" open":""}" data-t="${d.id}" aria-haspopup="listbox" aria-expanded="${openDD===d.id}">${d.label}${d.set.size?`・${d.set.size}`:""}<span class="car"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></span></button>
     <div class="dd-panel${openDD===d.id?"":" hidden"}">${d.opts.map(o=>
       `<div class="dd-opt${d.set.has(o.v)?" sel":""}" data-dd="${d.id}" data-v="${o.v}"><span class="bx">${d.set.has(o.v)?"✓":""}</span>${o.t}${o.c!==undefined?`<span class="cnt">${o.c}</span>`:""}</div>`).join("")}</div>
   </div>`).join("");
