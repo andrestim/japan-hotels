@@ -816,9 +816,16 @@ const $=id=>document.getElementById(id);
 const norm=n=>n.replace(/^[★◎⏳]\s*/,"").trim();
 let fut=new Set(JSON.parse(localStorage.getItem("hj250future")||"[]"));
 let wat=new Set(JSON.parse(localStorage.getItem("hj250watch")||"[]"));
+let futEx=new Set(JSON.parse(localStorage.getItem("hj250futureEx")||"[]"));
+let watEx=new Set(JSON.parse(localStorage.getItem("hj250watchEx")||"[]"));
 JSON.parse(localStorage.getItem("hj250plan")||"[]").forEach(n=>fut.add(n));
 localStorage.removeItem("hj250plan");
-function saveSets(){localStorage.setItem("hj250future",JSON.stringify([...fut]));localStorage.setItem("hj250watch",JSON.stringify([...wat]));}
+function saveSets(){
+  localStorage.setItem("hj250future",JSON.stringify([...fut]));
+  localStorage.setItem("hj250watch",JSON.stringify([...wat]));
+  localStorage.setItem("hj250futureEx",JSON.stringify([...futEx]));
+  localStorage.setItem("hj250watchEx",JSON.stringify([...watEx]));
+}
 const BUILT_FUT=new Set(),BUILT_WAT=new Set();
 GROUPED.concat(INDIE).forEach(h=>{if(h[8]==="◎")BUILT_FUT.add(norm(h[1]));else if(h[8]==="⏳")BUILT_WAT.add(norm(h[1]));});
 SLOTS.forEach(s=>s.rows.forEach(r=>{if(r[0].startsWith("◎"))BUILT_FUT.add(norm(r[0]));else if(r[0].startsWith("⏳"))BUILT_WAT.add(norm(r[0]));}));
@@ -831,8 +838,8 @@ function gmap(name,loc){
 function bandOf(rank,bands){return bands.find(b=>rank>=b.from&&rank<=b.to);}
 function actsHTML(name){
   const n=norm(name);
-  const inF=fut.has(n)||BUILT_FUT.has(n);
-  const inW=wat.has(n)||BUILT_WAT.has(n);
+  const inF=fut.has(n)||(BUILT_FUT.has(n)&&!futEx.has(n));
+  const inW=wat.has(n)||(BUILT_WAT.has(n)&&!watEx.has(n));
   return `<div class="acts">
     <button class="bmk${inF?" in":""}" data-n="${n}" aria-label="加入將來" title="${inF?"移出將來":"加入將來"}">${BM_ICON}</button>
     <button class="mag${inW?" in":""}" data-n="${n}" aria-label="加入觀察" title="${inW?"移出觀察":"加入觀察"}">${MAG_ICON}</button>
@@ -934,7 +941,8 @@ function tripList(kind){
     if(srow)seen.set(n,{type:"s",row:srow});
     else seen.set(n,{type:"x",n});
   };
-  (kind==="future"?BUILT_FUT:BUILT_WAT).forEach(addRow);
+  const ex=kind==="future"?futEx:watEx;
+  (kind==="future"?BUILT_FUT:BUILT_WAT).forEach(n=>{if(!ex.has(n))addRow(n);});
   (kind==="future"?fut:wat).forEach(addRow);
   return [...seen.values()];
 }
@@ -1113,14 +1121,18 @@ function bindActs(){
   document.querySelectorAll(".bmk").forEach(b=>{
     b.addEventListener("click",()=>{
       const n=b.dataset.n;
-      fut.has(n)?fut.delete(n):fut.add(n);
+      const on=fut.has(n)||(BUILT_FUT.has(n)&&!futEx.has(n));
+      if(on){fut.delete(n);if(BUILT_FUT.has(n))futEx.add(n);}
+      else{fut.add(n);futEx.delete(n);}
       saveSets();render();
     });
   });
   document.querySelectorAll(".mag").forEach(b=>{
     b.addEventListener("click",()=>{
       const n=b.dataset.n;
-      wat.has(n)?wat.delete(n):wat.add(n);
+      const on=wat.has(n)||(BUILT_WAT.has(n)&&!watEx.has(n));
+      if(on){wat.delete(n);if(BUILT_WAT.has(n))watEx.add(n);}
+      else{wat.add(n);watEx.delete(n);}
       saveSets();render();
     });
   });
