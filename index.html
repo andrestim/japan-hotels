@@ -228,7 +228,7 @@ a.rname:hover{color:var(--gold);}
   background:transparent;color:var(--band-a);border:1px solid var(--band-a);
   white-space:nowrap;
 }
-.rloc{font-size:12px;color:var(--ink-faint);}
+.rloc{display:block;margin-top:5px;font-size:12px;color:var(--ink-faint);letter-spacing:.03em;}
 .lev{
   font-size:11px;padding:1px 9px;border-radius:4px;
   background:var(--chip);color:var(--ink-soft);border:1px solid var(--chip-line);
@@ -844,11 +844,11 @@ function rowHTML(h,bands,indie,trip){
     <div class="rmain">
       <div class="rtitle">
         <a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${norm(name)}</a>
-        <span class="rloc">${loc}${series&&series!==group&&!indie?"｜"+series:indie?"｜"+series:""}</span>
         ${tag}
         ${mark==="★"?`<span class="stayed">住過</span>`:""}
         <span class="price" data-tip="${PRICE_TIP[price]}">${PRICE_MARK[price]}</span>
       </div>
+      <div class="rloc">${loc}</div>
       <div class="rnote">${note}</div>
     </div>
     ${actsHTML(name)}
@@ -882,7 +882,7 @@ function slotRowHTML(r,idx){
   return `<div class="slot-row">
     <div class="slot-rank">${idx}</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
@@ -893,7 +893,7 @@ function slotTripHTML(r){
   return `<div class="row" style="--band-color:var(--band-c)">
     <div class="rank stay" style="color:var(--ink-faint);font-size:13px;">定番</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="lev">定番</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="lev">定番</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
@@ -982,7 +982,7 @@ function renderTrip(){
     html+=`<div class="row" style="--band-color:${scoreColor(score)}">
       <div class="rank stay" style="color:${scoreColor(score)}">${score}</div>
       <div class="rmain">
-        <div class="rtitle"><a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${name}</a><span class="rloc">${loc}</span>${xref(name)}</div>
+        <div class="rtitle"><a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${name}</a>${xref(name)}</div><div class="rloc">${loc}</div>
         <div class="rnote">${comment}</div>
       </div>
       ${actsHTML(name)}
