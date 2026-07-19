@@ -861,7 +861,7 @@ function rowHTML(h,bands,indie,trip){
       <div class="rtitle">
         <a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${norm(name)}</a>
         ${tag}
-        ${mark==="★"?`<span class="stayed">住過</span>`:""}
+        ${mark==="★"?`<span class="stayed">已體驗</span>`:""}
         <span class="price" data-tip="${PRICE_TIP[price]}">${PRICE_MARK[price]}</span>
       </div>
       <div class="rloc">${loc}</div>
@@ -898,7 +898,7 @@ function slotRowHTML(r,idx){
   return `<div class="slot-row">
     <div class="slot-rank">${idx}</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a>${stay?`<span class="stayed">已體驗</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
@@ -909,7 +909,7 @@ function slotTripHTML(r){
   return `<div class="row" style="--band-color:var(--band-c)">
     <div class="rank stay" style="color:var(--ink-faint);font-size:13px;">定番</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="lev">定番</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="lev">定番</span>${stay?`<span class="stayed">已體驗</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div><div class="rloc">${r[1]}</div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
