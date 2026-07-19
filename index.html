@@ -4,87 +4,106 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hotel Japan 250</title>
-<meta name="theme-color" content="#0B0907">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%230B0907'/%3E%3Crect x='3' y='3' width='58' height='58' rx='10' fill='none' stroke='%23E6BC66' stroke-width='2'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23E6BC66' font-family='serif'%3E宿%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#F4F1E9">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23F4F1E9'/%3E%3Crect x='11' y='11' width='42' height='42' rx='9' fill='none' stroke='%23BF4A31' stroke-width='3'/%3E%3Ctext x='32' y='45' font-size='27' text-anchor='middle' fill='%23BF4A31' font-family='serif'%3E宿%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0B0908;
-  --card:#161311;
-  --card-hi:#1E1A16;
-  --ink:#F1EBDD;
-  --ink-soft:#BCB2A0;
-  --ink-faint:#867E71;
-  --gold:#E6BC66;
-  --gold-deep:#C29A48;
-  --shu:#C96F52;
-  --band-s:#E6BC66;
-  --band-a:#7FA894;
-  --band-b:#8E9AB6;
-  --band-c:#8F887B;
-  --line:#292420;
-  --chip:#211A14;
-  --chip-line:#3E362B;
+  --bg:#F4F1E9;
+  --card:#FCFBF7;
+  --card-hi:#FFFFFF;
+  --ink:#23201B;
+  --ink-soft:#6A6355;
+  --ink-faint:#9A9282;
+  --gold:#9A7124;
+  --gold-deep:#7C591A;
+  --shu:#BF4A31;
+  --band-s:#A87C2B;
+  --band-a:#5A7B58;
+  --band-b:#46688F;
+  --band-c:#7A7160;
+  --line:#E7E1D4;
+  --chip:#EFEAE0;
+  --chip-line:#DBD3C3;
+  --on-gold:#FCFAF4;
+  --shadow:56 46 26;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{
   background:
-    radial-gradient(120% 60% at 15% 0%, rgba(230,188,102,.035), transparent 55%),
-    radial-gradient(90% 50% at 100% 30%, rgba(201,111,82,.022), transparent 60%),
+    radial-gradient(115% 55% at 88% -8%, rgba(154,113,36,.05), transparent 60%),
+    radial-gradient(90% 45% at 8% 0%, rgba(191,74,49,.028), transparent 58%),
     var(--bg);
   background-attachment:fixed;
   color:var(--ink);
   font-family:'Noto Sans TC',sans-serif;
   font-size:14px;
-  line-height:1.62;
+  line-height:1.68;
+  -webkit-font-smoothing:antialiased;
 }
-::selection{background:var(--gold);color:var(--bg);}
-.wrap{max-width:1080px;margin:0 auto;padding:0 16px 80px;}
+::selection{background:var(--gold);color:var(--on-gold);}
+.wrap{max-width:1140px;margin:0 auto;padding:0 16px 100px;}
 
 /* ---------- header ---------- */
-header{padding:38px 0 14px;position:relative;}
+header{padding:60px 0 24px;position:relative;}
+.mast{position:relative;padding-right:84px;}
 .eyebrow{
   font-family:'Shippori Mincho',serif;
-  letter-spacing:.55em;
+  letter-spacing:.58em;
   font-size:12px;
   color:var(--gold-deep);
-  margin-bottom:14px;
+  margin-bottom:20px;
+  padding-left:2px;
 }
 h1{
   font-family:'Shippori Mincho',serif;
   font-weight:800;
-  font-size:clamp(28px,5.5vw,44px);
-  letter-spacing:.1em;
-  line-height:1.22;
+  font-size:clamp(30px,5.8vw,48px);
+  letter-spacing:.12em;
+  line-height:1.2;
 }
-h1 .h1-num{color:var(--gold);font-weight:700;}
+h1 .h1-num{color:var(--gold);font-weight:700;padding:0 .04em;}
 .tagline{
   font-family:'Shippori Mincho',serif;font-weight:400;
-  margin-top:12px;font-size:13.5px;letter-spacing:.14em;
+  margin-top:16px;font-size:14px;letter-spacing:.18em;
   color:var(--ink-soft);
 }
+/* 朱印 — the one bold mark */
+.seal{
+  position:absolute;top:2px;right:0;
+  width:62px;height:62px;border-radius:13px;
+  background:transparent;color:var(--shu);
+  border:2px solid var(--shu);
+  font-family:'Shippori Mincho',serif;font-weight:700;font-size:30px;
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(-2.5deg);
+  user-select:none;
+}
+.seal::after{
+  content:"";position:absolute;inset:4px;
+  border:1px solid rgba(191,74,49,.45);border-radius:9px;
+}
 #search{
-  position:absolute;top:46px;right:0;
-  width:250px;
-  border:1px solid var(--chip-line);border-radius:8px;
-  padding:9px 14px;font-size:13px;background:var(--card);color:var(--ink);
-  font-family:'Noto Sans TC',sans-serif;
+  display:block;margin-top:26px;
+  width:340px;max-width:100%;
+  border:1px solid var(--chip-line);border-radius:9px;
+  padding:11px 15px;font-size:13px;background:var(--card);color:var(--ink);
+  font-family:'Noto Sans TC',sans-serif;letter-spacing:.02em;
+  transition:border-color .2s,box-shadow .2s;
 }
 #search::placeholder{color:var(--ink-faint);}
-#search:focus{outline:2px solid var(--gold);border-color:var(--gold);}
+#search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(154,113,36,.14);}
 .legend{margin-top:14px;font-size:12px;color:var(--ink-soft);}
 .legend .p{color:var(--gold);font-weight:700;letter-spacing:.04em;}
 
 /* ---------- controls ---------- */
 .controls{
   position:sticky;top:0;z-index:20;
-  background:rgba(11,9,7,.93);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
+  background:var(--bg);
   border-bottom:1px solid var(--line);
-  padding:12px 16px;
+  padding:14px 16px;
   margin:0 -16px;
 }
 .ctrl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:9px;}
@@ -106,7 +125,7 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
   font-family:'Noto Sans TC',sans-serif;transition:background .2s,color .2s,border-color .2s;
 }
 .pills button:hover{border-color:var(--gold-deep);color:var(--ink);}
-.pills button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:400;}
+.pills button.on{background:var(--gold);border-color:var(--gold);color:var(--on-gold);font-weight:500;}
 .pills button:focus-visible{outline:2px solid var(--shu);}
 .pill-sep{width:1px;height:18px;background:var(--chip-line);margin:0 4px;}
 .dd{position:relative;}
@@ -123,7 +142,7 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
   position:absolute;top:calc(100% + 6px);left:0;
   background:var(--card-hi);border:1px solid var(--chip-line);border-radius:10px;
   padding:6px;min-width:172px;max-height:580px;overflow:auto;z-index:40;
-  box-shadow:0 10px 28px rgba(0,0,0,.55);
+  box-shadow:0 14px 34px rgba(var(--shadow),.16);
 }
 .dd-opt{
   display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:6px;
@@ -133,7 +152,7 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
 .dd-opt .bx{
   width:14px;height:14px;border:1px solid var(--chip-line);border-radius:4px;
   flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:var(--bg);
+  font-size:10px;color:var(--on-gold);
 }
 .dd-opt.sel{color:var(--gold);}
 .dd-opt.sel .bx{background:var(--gold);border-color:var(--gold);}
@@ -146,29 +165,29 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
   font-family:'Noto Sans TC',sans-serif;display:flex;gap:6px;align-items:center;
   transition:background .2s,color .2s;
 }
-.ftag:hover{background:var(--gold);color:var(--bg);}
+.ftag:hover{background:var(--gold);color:var(--on-gold);}
 .ftag .x{font-size:13px;line-height:1;}
 #clearBtn{
   border:1px solid var(--shu);background:transparent;color:var(--shu);
   border-radius:20px;padding:3px 12px;font-size:12px;cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;transition:background .2s,color .2s;
 }
-#clearBtn:hover{background:var(--shu);color:var(--bg);}
+#clearBtn:hover{background:var(--shu);color:var(--on-gold);}
 .count{font-size:12px;color:var(--ink-faint);margin-left:auto;white-space:nowrap;}
 
 /* ---------- rows ---------- */
 .band-head,.region-head{
   font-family:'Shippori Mincho',serif;
   font-weight:600;font-size:16px;letter-spacing:.12em;
-  margin:28px 0 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:40px 0 16px;display:flex;align-items:center;gap:11px;flex-wrap:wrap;
   color:var(--ink);
 }
 .band-head::after,.region-head::after{
   content:"";flex:1;height:1px;background:var(--line);min-width:40px;
 }
 .band-head .tag,.region-head .tag{
-  color:var(--bg);font-size:12px;letter-spacing:.18em;
-  padding:3px 12px;border-radius:2px;font-family:'Shippori Mincho',serif;font-weight:600;
+  color:var(--on-gold);font-size:12px;letter-spacing:.05em;
+  padding:4px 13px;border-radius:3px;font-family:'Shippori Mincho',serif;font-weight:600;
 }
 .band-head .desc,.region-head .desc{font-family:'Shippori Mincho',serif;font-size:12.5px;color:var(--ink-soft);letter-spacing:.08em;}
 .region-head .pin{width:15px;height:15px;flex:0 0 auto;color:var(--gold);}
@@ -180,17 +199,18 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
 .row{
   position:relative;
   display:grid;
-  grid-template-columns:58px 1fr;
-  gap:0 14px;
+  grid-template-columns:60px 1fr;
+  gap:0 16px;
   background:var(--card);
   border:1px solid var(--line);
-  border-left:4px solid var(--band-color,var(--band-c));
-  border-radius:8px;
-  padding:13px 15px;
-  margin-bottom:8px;
-  transition:background .2s,border-color .2s;
+  border-left:3px solid var(--band-color,var(--band-c));
+  border-radius:9px;
+  padding:16px 18px;
+  margin-bottom:10px;
+  box-shadow:0 1px 2px rgba(var(--shadow),.04);
+  transition:background .2s,border-color .2s,box-shadow .2s,transform .2s;
 }
-.row:hover{background:var(--card-hi);}
+.row:hover{background:var(--card-hi);box-shadow:0 6px 18px rgba(var(--shadow),.09);border-color:var(--chip-line);}
 .rank{
   font-family:'Shippori Mincho',serif;
   font-weight:800;font-size:24px;color:var(--band-color,var(--ink));
@@ -200,12 +220,12 @@ h1 .h1-num{color:var(--gold);font-weight:700;}
 .rank.stay{font-size:16px;letter-spacing:.02em;padding-top:8px;}
 .rmain{min-width:0;}
 .rtitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;padding-right:66px;}
-.rname{font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;transition:color .2s;}
+.rname{font-weight:500;font-size:15px;color:var(--ink);text-decoration:none;transition:color .2s;}
 a.rname:hover{color:var(--gold);}
 .rchips{display:flex;gap:6px;margin-top:6px;}
 .stayed{
   font-size:11px;padding:1px 9px;border-radius:4px;
-  background:transparent;color:var(--ink-faint);border:1px solid var(--chip-line);
+  background:transparent;color:var(--band-a);border:1px solid var(--band-a);
   white-space:nowrap;
 }
 .rloc{font-size:12px;color:var(--ink-faint);}
@@ -222,10 +242,10 @@ a.rname:hover{color:var(--gold);}
 }
 .fmark{
   font-size:11px;padding:1px 9px;border-radius:4px;white-space:nowrap;
-  background:var(--gold);color:var(--bg);font-weight:700;
+  background:var(--gold);color:var(--on-gold);font-weight:700;
 }
 .fmark.plan{background:transparent;color:var(--gold);border:1px solid var(--gold);}
-.rnote{margin-top:7px;font-size:13px;color:var(--ink-soft);line-height:1.7;}
+.rnote{margin-top:9px;font-size:13px;color:var(--ink-soft);line-height:1.78;letter-spacing:.01em;}
 .acts{position:absolute;top:10px;right:10px;display:flex;gap:5px;}
 .bmk,.mag{
   width:27px;height:27px;display:flex;align-items:center;justify-content:center;
@@ -236,7 +256,7 @@ a.rname:hover{color:var(--gold);}
 }
 .bmk svg,.mag svg{width:13px;height:13px;}
 .bmk:hover,.mag:hover{border-color:var(--gold);color:var(--gold);}
-.bmk.in,.mag.in{background:var(--gold);border-color:var(--gold);color:var(--bg);}
+.bmk.in,.mag.in{background:var(--gold);border-color:var(--gold);color:var(--on-gold);}
 .bmk:focus-visible,.mag:focus-visible{outline:2px solid var(--shu);}
 .price{
   font-size:12px;font-weight:700;letter-spacing:.06em;
@@ -246,7 +266,7 @@ a.rname:hover{color:var(--gold);}
   content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);
   background:var(--card-hi);border:1px solid var(--chip-line);color:var(--ink-soft);
   padding:4px 11px;border-radius:6px;font-size:11px;font-weight:400;letter-spacing:0;
-  white-space:nowrap;z-index:50;box-shadow:0 6px 18px rgba(0,0,0,.4);
+  white-space:nowrap;z-index:50;box-shadow:0 8px 20px rgba(var(--shadow),.18);
 }
 
 /* ---------- 定番 ---------- */
@@ -263,12 +283,13 @@ a.rname:hover{color:var(--gold);}
 .slot-title .slot-count{font-family:'Noto Sans TC',sans-serif;font-size:12px;color:var(--ink-faint);letter-spacing:0;font-weight:400;}
 .slot-row{
   position:relative;
-  display:grid;grid-template-columns:36px 1fr;gap:0 12px;
-  background:var(--card);border:1px solid var(--line);border-radius:8px;
-  padding:11px 15px;margin-bottom:7px;
-  transition:background .2s;
+  display:grid;grid-template-columns:38px 1fr;gap:0 14px;
+  background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:14px 18px;margin-bottom:9px;
+  box-shadow:0 1px 2px rgba(var(--shadow),.04);
+  transition:background .2s,box-shadow .2s;
 }
-.slot-row:hover{background:var(--card-hi);}
+.slot-row:hover{background:var(--card-hi);box-shadow:0 6px 18px rgba(var(--shadow),.09);}
 .slot-rank{
   font-family:'Shippori Mincho',serif;font-weight:800;font-size:18px;
   color:var(--gold);text-align:right;padding-top:2px;
@@ -297,10 +318,13 @@ footer{margin-top:40px;font-size:11.5px;color:var(--ink-faint);line-height:1.8;b
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">日本の宿 ・ 私撰二五〇</div>
-  <h1>日本飯店<span class="h1-num">250</span>選</h1>
-  <div class="tagline">值得為那一泊，編一趟旅。</div>
-  <input id="search" type="search" placeholder="搜尋飯店、城市、集團…" aria-label="搜尋">
+  <div class="mast">
+    <div class="eyebrow">日本の宿 ・ 私撰二五〇</div>
+    <h1>日本飯店<span class="h1-num">250</span>選</h1>
+    <div class="tagline">值得為那一泊，編一趟旅。</div>
+    <div class="seal" aria-hidden="true">宿</div>
+  </div>
+  <input id="search" type="search" placeholder="搜尋" aria-label="搜尋">
 </header>
 
 <div class="controls">
@@ -762,13 +786,13 @@ const STAYS=[
 
 const STATUS={"IHG":"IHG - 鑽","Marriott":"Marriott - 白金","Accor":"Accor - 白金","GHA":"GHA - 鈦"};
 const BANDS_G=[
-{key:"S",from:1,to:40,color:"var(--band-s)",label:"S 帶 1–40",desc:"為一泊而啟程"},
+{key:"S",from:1,to:40,color:"var(--band-s)",label:"S 帶 1–40",desc:"為一泊而動身"},
 {key:"A",from:41,to:100,color:"var(--band-a)",label:"A 帶 41–100",desc:"擇時，終須一會"},
 {key:"B",from:101,to:160,color:"var(--band-b)",label:"B 帶 101–160",desc:"一方之定石"},
 {key:"C",from:161,to:200,color:"var(--band-c)",label:"C 帶 161–200",desc:"途上的安穩"}
 ];
 const BANDS_I=[
-{key:"S",from:1,to:12,color:"var(--band-s)",label:"S 帶 1–12",desc:"為一泊而啟程"},
+{key:"S",from:1,to:12,color:"var(--band-s)",label:"S 帶 1–12",desc:"為一泊而動身"},
 {key:"A",from:13,to:25,color:"var(--band-a)",label:"A 帶 13–25",desc:"擇時，終須一會"},
 {key:"B",from:26,to:40,color:"var(--band-b)",label:"B 帶 26–40",desc:"一方之定石"},
 {key:"C",from:41,to:50,color:"var(--band-c)",label:"C 帶 41–50",desc:"途上的安穩"}
@@ -822,9 +846,9 @@ function rowHTML(h,bands,indie,trip){
         <a class="rname" href="${gmap(name,loc)}" target="_blank" rel="noopener">${norm(name)}</a>
         <span class="rloc">${loc}${series&&series!==group&&!indie?"｜"+series:indie?"｜"+series:""}</span>
         ${tag}
+        ${mark==="★"?`<span class="stayed">住過</span>`:""}
         <span class="price" data-tip="${PRICE_TIP[price]}">${PRICE_MARK[price]}</span>
       </div>
-      ${mark==="★"?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
       <div class="rnote">${note}</div>
     </div>
     ${actsHTML(name)}
@@ -858,8 +882,7 @@ function slotRowHTML(r,idx){
   return `<div class="slot-row">
     <div class="slot-rank">${idx}</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
-      ${stay?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
@@ -870,8 +893,7 @@ function slotTripHTML(r){
   return `<div class="row" style="--band-color:var(--band-c)">
     <div class="rank stay" style="color:var(--ink-faint);font-size:13px;">定番</div>
     <div class="rmain">
-      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="lev">定番</span><span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
-      ${stay?`<div class="rchips"><span class="stayed">住過</span></div>`:""}
+      <div class="rtitle"><a class="rname" href="${gmap(r[0],r[1])}" target="_blank" rel="noopener">${norm(r[0])}</a><span class="rloc">${r[1]}</span><span class="lev">定番</span>${stay?`<span class="stayed">住過</span>`:""}<span class="price" data-tip="${PRICE_TIP[r[3]]}">${PRICE_MARK[r[3]]}</span></div>
       <div class="rnote">${r[4]}</div>
     </div>
     ${actsHTML(r[0])}
